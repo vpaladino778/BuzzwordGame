@@ -65,11 +65,14 @@ public abstract class AppTemplate extends Application {
 
                 fileComponent = builder.buildFileComponent();
                 dataComponent = builder.buildDataComponent();
-                gui = (propertyManager.hasProperty(APP_WINDOW_WIDTH) && propertyManager.hasProperty(APP_WINDOW_HEIGHT))
-                      ? new AppGUI(primaryStage, propertyManager.getPropertyValue(APP_TITLE.toString()), this,
-                                   Integer.parseInt(propertyManager.getPropertyValue(APP_WINDOW_WIDTH)),
-                                   Integer.parseInt(propertyManager.getPropertyValue(APP_WINDOW_HEIGHT)))
-                      : new AppGUI(primaryStage, propertyManager.getPropertyValue(APP_TITLE.toString()), this);
+                gui = new AppGUI(primaryStage, propertyManager.getPropertyValue(APP_TITLE.toString()), this, 800,600);
+                /*if (propertyManager.hasProperty(APP_WINDOW_WIDTH) && propertyManager.hasProperty(APP_WINDOW_HEIGHT)) {
+                    gui = new AppGUI(primaryStage, propertyManager.getPropertyValue(APP_TITLE.toString()), this,
+                            Integer.parseInt(propertyManager.getPropertyValue(APP_WINDOW_WIDTH)),
+                            Integer.parseInt(propertyManager.getPropertyValue(APP_WINDOW_HEIGHT)));
+                }else{
+                    gui = new AppGUI(primaryStage, propertyManager.getPropertyValue(APP_TITLE.toString()), this);
+                }*/
                 workspaceComponent = builder.buildWorkspaceComponent();
                 initStylesheet();
                 gui.initStyle();
@@ -89,6 +92,7 @@ public abstract class AppTemplate extends Application {
             AppMessageDialogSingleton dialog = AppMessageDialogSingleton.getSingleton();
             dialog.show(propertyManager.getPropertyValue(PROPERTIES_LOAD_ERROR_TITLE.toString()),
                         propertyManager.getPropertyValue(PROPERTIES_LOAD_ERROR_MESSAGE.toString()));
+
             return false;
         }
 

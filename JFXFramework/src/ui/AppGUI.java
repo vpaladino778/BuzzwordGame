@@ -41,10 +41,10 @@ public class AppGUI implements AppStyleArbiter {
     protected Scene          primaryScene;     // the scene graph
     protected BorderPane     appPane;          // the root node in the scene graph, to organize the containers
     protected FlowPane       toolbarPane;      // the top toolbar
-    protected Button         newButton;        // button to create a new instance of the application
+    /*protected Button         newButton;        // button to create a new instance of the application
     protected Button         saveButton;       // button to save progress on application
     protected Button         loadButton;       // button to load a saved game from (json) file
-    protected Button         exitButton;       // button to exit application
+    protected Button         exitButton;       // button to exit application*/
     protected String         applicationTitle; // the application title
 
     private int appWindowWidth;  // optional parameter for window width that can be set by the application
@@ -103,16 +103,14 @@ public class AppGUI implements AppStyleArbiter {
      */
     private void initializeToolbar() throws IOException {
         toolbarPane = new FlowPane();
-        newButton = initializeChildButton(toolbarPane, NEW_ICON.toString(), NEW_TOOLTIP.toString(), false);
-        loadButton = initializeChildButton(toolbarPane, LOAD_ICON.toString(), LOAD_TOOLTIP.toString(), false);
-        saveButton = initializeChildButton(toolbarPane, SAVE_ICON.toString(), SAVE_TOOLTIP.toString(), true);
-        exitButton = initializeChildButton(toolbarPane, EXIT_ICON.toString(), EXIT_TOOLTIP.toString(), false);
+
     }
 
     private void initializeToolbarHandlers(AppTemplate app) throws InstantiationException {
         try {
             Method         getFileControllerClassMethod = app.getClass().getMethod("getFileControllerClass");
             String         fileControllerClassName      = (String) getFileControllerClassMethod.invoke(app);
+            System.out.println(fileControllerClassName);
             Class<?>       klass                        = Class.forName("controller." + fileControllerClassName);
             Constructor<?> constructor                  = klass.getConstructor(AppTemplate.class);
             fileController = (FileController) constructor.newInstance(app);
@@ -121,7 +119,7 @@ public class AppGUI implements AppStyleArbiter {
             System.exit(1);
         }
 
-        newButton.setOnAction(e -> fileController.handleNewRequest());
+       /* newButton.setOnAction(e -> fileController.handleNewRequest());
         saveButton.setOnAction(e -> {
             try {
                 fileController.handleSaveRequest();
@@ -137,13 +135,13 @@ public class AppGUI implements AppStyleArbiter {
                 e1.printStackTrace();
             }
         });
-        exitButton.setOnAction(e -> fileController.handleExitRequest());
+        exitButton.setOnAction(e -> fileController.handleExitRequest());*/
     }
 
     public void updateWorkspaceToolbar(boolean savable) {
-        saveButton.setDisable(!savable);
+      /*  saveButton.setDisable(!savable);
         newButton.setDisable(false);
-        exitButton.setDisable(false);
+        exitButton.setDisable(false);*/
     }
 
     private void initializeWindow() throws IOException {
@@ -161,13 +159,13 @@ public class AppGUI implements AppStyleArbiter {
                                                                              appWindowHeight);
 
         URL imgDirURL = AppTemplate.class.getClassLoader().getResource(APP_IMAGEDIR_PATH.getParameter());
-        if (imgDirURL == null)
-            throw new FileNotFoundException("Image resrouces folder does not exist.");
+        /*if (imgDirURL == null)
+            throw new FileNotFoundException("Image resources folder does not exist.");
         try (InputStream appLogoStream = Files.newInputStream(Paths.get(imgDirURL.toURI()).resolve(propertyManager.getPropertyValue(APP_LOGO)))) {
             primaryStage.getIcons().add(new Image(appLogoStream));
         } catch (URISyntaxException e) {
             e.printStackTrace();
-        }
+        }*/
 
         primaryStage.setScene(primaryScene);
         primaryStage.show();

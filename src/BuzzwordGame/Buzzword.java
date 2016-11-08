@@ -6,6 +6,8 @@ import components.AppComponentsBuilder;
 import components.AppDataComponent;
 import components.AppFileComponent;
 import components.AppWorkspaceComponent;
+import data.GameData;
+import data.GameDataFile;
 
 /**
  * Created by vpala on 11/7/2016.
@@ -18,14 +20,12 @@ public class Buzzword extends AppTemplate {
         return new AppComponentsBuilder() {
             @Override
             public AppDataComponent buildDataComponent() throws Exception {
-                return null;
-                //return new GameData(Hangman.this);
+                return new GameData(Buzzword.this);
             }
 
             @Override
             public AppFileComponent buildFileComponent() throws Exception {
-                //return new GameDataFile();
-                return null;
+                return new GameDataFile();
             }
 
             @Override
