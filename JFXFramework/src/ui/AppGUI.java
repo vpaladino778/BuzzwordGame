@@ -212,4 +212,8 @@ public class AppGUI implements AppStyleArbiter {
     public void initStyle() {
         // currently, we do not provide any stylization at the framework-level
     }
+
+    public void setScene(Scene scene){
+        primaryStage.setScene(scene);
+    }
 }

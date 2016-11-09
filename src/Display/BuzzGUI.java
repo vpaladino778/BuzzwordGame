@@ -1,10 +1,13 @@
 package Display;
 
+import ScreenStates.GameState;
+import ScreenStates.LevelState;
 import ScreenStates.MenuState;
 import ScreenStates.StateController;
 import apptemplate.AppTemplate;
 import components.AppWorkspaceComponent;
 import controller.BuzzwordController;
+import javafx.scene.Scene;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -20,8 +23,6 @@ public class BuzzGUI extends AppWorkspaceComponent{
     private BuzzwordController controller;
     private StateController stateController;
 
-    //States
-    private MenuState menuState;
 
     //GUI components
     private VBox toolBar;
@@ -33,17 +34,13 @@ public class BuzzGUI extends AppWorkspaceComponent{
         controller = (BuzzwordController) gui.getFileController();
         //States
         stateController = controller.getStateController();
-        menuState = new MenuState();
-        stateController.setCurrentState(menuState);
-
+        setupButtonHandlers();
         layoutGUI();
     }
 
     private void layoutGUI(){
-        Pane statePane = stateController.getCurrentState().getPane();
-
-        workspace = new HBox();
-        workspace.getChildren().setAll(statePane);
+        Scene scene = stateController.getCurrentState().getStateScene();
+        gui.setScene(scene);
 
     }
     @Override
@@ -54,6 +51,32 @@ public class BuzzGUI extends AppWorkspaceComponent{
     @Override
     public void reloadWorkspace() {
 
+    }
+
+    public void setupButtonHandlers(){
+            //Menu Screen
+            stateController.getMenuState().getLevelButton().setOnAction(e->{
+                        stateController.setCurrentState(stateController.getLevelState());
+                        layoutGUI();
+                    }
+            );
+            stateController.getMenuState().getPlayButton().setOnAction(e->{
+                        stateController.setCurrentState(stateController.getGameState());
+                        layoutGUI();
+                    }
+            );
+            //Level Screen
+            stateController.getLevelState().getHomeButton().setOnAction(e->{
+                        stateController.setCurrentState(stateController.getMenuState());
+                        layoutGUI();
+                    }
+            );
+            //Game screen
+            stateController.getGameState().getHomeButton().setOnAction(e->{
+                        stateController.setCurrentState(stateController.getMenuState());
+                        layoutGUI();
+                    }
+            );
     }
 
     public BuzzwordController getController(){

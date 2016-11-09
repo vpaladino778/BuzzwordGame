@@ -1,0 +1,12 @@
+.vbox {
+    -fx-background-color: aliceblue;
+    -fx-padding: 15;
+    -fx-spacing: 15;
+}
+
+.header-text {
+    -fx-font-size: 32pt;
+    -fx-text-fill: indigo;
+    -fx-font-family: "Century Gothic", sans-serif;
+    -fx-opacity: 1;
+}
