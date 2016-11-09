@@ -15,7 +15,6 @@ public class BuzzwordController implements FileController{
     public BuzzwordController(AppTemplate appTemplate){
 
         stateController = new StateController();
-        System.out.println("Made buzzcontroller");
     }
 
     public StateController getStateController(){ return stateController; }

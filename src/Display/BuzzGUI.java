@@ -5,7 +5,6 @@ import ScreenStates.StateController;
 import apptemplate.AppTemplate;
 import components.AppWorkspaceComponent;
 import controller.BuzzwordController;
-import javafx.scene.control.ToolBar;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -31,8 +30,7 @@ public class BuzzGUI extends AppWorkspaceComponent{
     public BuzzGUI(AppTemplate appTemplate){
         app = appTemplate;
         gui = app.getGUI();
-        //controller = (BuzzwordController) gui.getFileController();
-
+        controller = (BuzzwordController) gui.getFileController();
         //States
         stateController = controller.getStateController();
         menuState = new MenuState();

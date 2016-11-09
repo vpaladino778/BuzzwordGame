@@ -25,7 +25,6 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-import static settings.AppPropertyType.*;
 import static settings.InitializationParameters.APP_IMAGEDIR_PATH;
 
 /**
