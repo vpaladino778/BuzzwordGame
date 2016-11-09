@@ -10,10 +10,10 @@
     <property_list>
         <property name="APP_WINDOW_WIDTH" value="800"/>
         <property name="APP_WINDOW_HEIGHT" value="550"/>
-        <property name="APP_TITLE" value="Hangman"/>
+        <property name="APP_TITLE" value="Buzzword"/>
         <property name="APP_LOGO" value="Logo.png"/>
         <property name="APP_PATH_CSS" value="css"/>
-        <property name="APP_CSS" value="hangman_style.css"/>
+        <property name="APP_CSS" value="buzzword_style.css"/>
         <property name="APP_SAVED_GAMES_PATH" value="work"/>
 
         <!-- WORKSPACE CSS PROPERTIES -->

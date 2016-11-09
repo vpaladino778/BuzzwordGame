@@ -25,6 +25,7 @@ public class GameState extends State{
         statePane = new Pane();
         toolbar = new VBox();
         borderPane = new BorderPane();
+        toolbar.getStyleClass().add("vbox");
         toolbar.setPrefHeight(600);
 
         homeButton = new Button();

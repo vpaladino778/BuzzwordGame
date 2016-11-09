@@ -28,6 +28,7 @@ public class LevelState extends State{
         borderPane = new BorderPane();
         homeButton = new Button();
         homeButton.setText("Home");
+        toolbar.getStyleClass().add("vbox");
         toolbar.setPrefHeight(600);
 
         toolbar.getChildren().setAll(homeButton);

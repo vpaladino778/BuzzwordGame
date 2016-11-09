@@ -1,11 +1,10 @@
 package ScreenStates;
 
+import javafx.collections.FXCollections;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
+import javafx.scene.control.*;
+import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import propertymanager.PropertyManager;
 
@@ -17,8 +16,12 @@ import static settings.AppPropertyType.APP_WINDOW_WIDTH;
  */
 public class MenuState extends State {
 
-    private Button play;
-    private Button level;
+    private Button  play;
+    private Button  level;
+    private VBox    mainBox;
+    private BorderPane borderPane;
+    private Button createProfile;
+    private Button loginButton;
 
 
     public MenuState(){
@@ -28,15 +31,29 @@ public class MenuState extends State {
 
 
     public void layoutGUI(){
-        statePane = new FlowPane();
-        play = new Button();
-        play.setText("Start Game");
-        level = new Button();
-        level.setText("Levels");
+        statePane = new Pane();
+        mainBox = new VBox();
+        play = new Button("Start Game");
+        level = new Button("Levels");
+        createProfile = new Button("Create profile");
+        loginButton = new Button("Login");
+        borderPane = new BorderPane();
+        ChoiceBox gameModeBox = new ChoiceBox(FXCollections.observableArrayList("Words","People","Animals"));
+        gameModeBox.setTooltip(new Tooltip("Select a gamemode"));
+        gameModeBox.getSelectionModel().selectFirst();
 
+        mainBox.setAlignment(Pos.CENTER);
         Text heading = new Text("BuzzWord!");
         heading.getStyleClass().add("header-text");
-        statePane.getChildren().setAll(play,level,heading);
+        Text text = new Text("Select a game mode:");
+        mainBox.getChildren().setAll(play,level,text,gameModeBox,createProfile,loginButton);
+        borderPane.setTop(heading);
+        borderPane.setCenter(mainBox);
+        BorderPane.setAlignment(heading,Pos.TOP_CENTER);
+        statePane.getChildren().setAll(borderPane);
+
+
+
         stateScene = createScene(statePane);
     }
 
