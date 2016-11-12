@@ -22,6 +22,7 @@ public class MenuState extends State {
     private BorderPane borderPane;
     private Button createProfile;
     private Button loginButton;
+    private Button exitButton;
 
 
     public MenuState(){
@@ -37,6 +38,7 @@ public class MenuState extends State {
         level = new Button("Levels");
         createProfile = new Button("Create profile");
         loginButton = new Button("Login");
+        exitButton = new Button("Exit");
         borderPane = new BorderPane();
         ChoiceBox gameModeBox = new ChoiceBox(FXCollections.observableArrayList("Words","People","Animals"));
         gameModeBox.setTooltip(new Tooltip("Select a gamemode"));
@@ -46,7 +48,8 @@ public class MenuState extends State {
         Text heading = new Text("BuzzWord!");
         heading.getStyleClass().add("header-text");
         Text text = new Text("Select a game mode:");
-        mainBox.getChildren().setAll(play,level,text,gameModeBox,createProfile,loginButton);
+        mainBox.getChildren().setAll(play,level,text,gameModeBox,createProfile,loginButton, exitButton);
+        mainBox.setSpacing(10);
         borderPane.setTop(heading);
         borderPane.setCenter(mainBox);
         BorderPane.setAlignment(heading,Pos.TOP_CENTER);
@@ -59,12 +62,12 @@ public class MenuState extends State {
 
     //Getters and Setters
     public Button getPlayButton() {
-        return play;
+                            return play;
     }
-
-    public Button getLevelButton() {
-        return level;
-    }
+    public Button getLevelButton() {    return level; }
+    public Button getLoginButton(){ return loginButton; }
+    public Button getCreateProfile(){ return createProfile; }
+    public Button getExitButton(){ return exitButton; }
 
 
 }

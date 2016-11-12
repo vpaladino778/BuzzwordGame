@@ -56,6 +56,7 @@ public abstract class AppTemplate extends Application {
     public void start(Stage primaryStage) {
         AppMessageDialogSingleton  messageDialog = AppMessageDialogSingleton.getSingleton();
         YesNoCancelDialogSingleton yesNoDialog   = YesNoCancelDialogSingleton.getSingleton();
+
         messageDialog.init(primaryStage);
         yesNoDialog.init(primaryStage);
 

@@ -1,5 +1,6 @@
 package ScreenStates;
 
+import Display.WordGrid;
 import javafx.scene.control.Button;
 import javafx.scene.layout.*;
 import propertymanager.PropertyManager;
@@ -13,8 +14,11 @@ public class GameState extends State{
     private VBox toolbar;
     private BorderPane borderPane;
 
+    private WordGrid wordGrid;
+
     public GameState(){
         super();
+        wordGrid = new WordGrid(4,4);
         layoutGUI();
     }
 
@@ -33,6 +37,7 @@ public class GameState extends State{
 
         toolbar.getChildren().setAll(homeButton);
 
+        borderPane.setCenter(wordGrid.getNodeGrid());
         borderPane.setLeft(toolbar);
 
         statePane.getChildren().setAll(borderPane);

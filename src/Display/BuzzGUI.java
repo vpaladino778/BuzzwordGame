@@ -31,6 +31,10 @@ public class BuzzGUI extends AppWorkspaceComponent{
     public BuzzGUI(AppTemplate appTemplate){
         app = appTemplate;
         gui = app.getGUI();
+
+        ProfileSingleton.getSingleton().init();
+        CreateProfileSingleton.getSingleton().init();
+
         controller = (BuzzwordController) gui.getFileController();
         //States
         stateController = controller.getStateController();
@@ -63,6 +67,18 @@ public class BuzzGUI extends AppWorkspaceComponent{
             stateController.getMenuState().getPlayButton().setOnAction(e->{
                         stateController.setCurrentState(stateController.getGameState());
                         layoutGUI();
+                    }
+            );
+            stateController.getMenuState().getLoginButton().setOnAction(e->{
+                        ProfileSingleton.getSingleton().showDialog();
+                    }
+            );
+            stateController.getMenuState().getCreateProfile().setOnAction(e->{
+                        CreateProfileSingleton.getSingleton().showDialog();
+                    }
+            );
+            stateController.getMenuState().getExitButton().setOnAction(e->{
+                        System.exit(0);
                     }
             );
             //Level Screen
