@@ -23,6 +23,8 @@ public class MenuState extends State {
     private Button createProfile;
     private Button loginButton;
     private Button exitButton;
+    private VBox toolbar;
+    private HBox outerBox;
 
 
     public MenuState(){
@@ -34,6 +36,11 @@ public class MenuState extends State {
     public void layoutGUI(){
         statePane = new Pane();
         mainBox = new VBox();
+        toolbar = new VBox();
+        outerBox = new HBox();
+        toolbar.getStyleClass().add("vbox");
+        toolbar.setPrefHeight(600);
+
         play = new Button("Start Game");
         level = new Button("Levels");
         createProfile = new Button("Create profile");
@@ -48,12 +55,13 @@ public class MenuState extends State {
         Text heading = new Text("BuzzWord!");
         heading.getStyleClass().add("header-text");
         Text text = new Text("Select a game mode:");
-        mainBox.getChildren().setAll(play,level,text,gameModeBox,createProfile,loginButton, exitButton);
+        toolbar.getChildren().setAll(play,level,text,gameModeBox,createProfile,loginButton, exitButton);
         mainBox.setSpacing(10);
         borderPane.setTop(heading);
         borderPane.setCenter(mainBox);
         BorderPane.setAlignment(heading,Pos.TOP_CENTER);
-        statePane.getChildren().setAll(borderPane);
+        outerBox.getChildren().addAll(toolbar,borderPane);
+        statePane.getChildren().setAll(outerBox);
 
 
 

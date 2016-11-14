@@ -3,6 +3,7 @@ package ScreenStates;
 import Display.WordGrid;
 import javafx.scene.control.Button;
 import javafx.scene.layout.*;
+import javafx.scene.text.Text;
 import propertymanager.PropertyManager;
 
 /**
@@ -28,6 +29,7 @@ public class GameState extends State{
 
         statePane = new Pane();
         toolbar = new VBox();
+        HBox outerBox = new HBox();
         borderPane = new BorderPane();
         toolbar.getStyleClass().add("vbox");
         toolbar.setPrefHeight(600);
@@ -35,12 +37,22 @@ public class GameState extends State{
         homeButton = new Button();
         homeButton.setText("Home");
 
+        Text heading = new Text("BuzzWord!");
+        heading.getStyleClass().add("header-text");
+
+
         toolbar.getChildren().setAll(homeButton);
 
+        AnchorPane headPane = new AnchorPane();
+        headPane.getChildren().addAll(heading);
         borderPane.setCenter(wordGrid.getNodeGrid());
-        borderPane.setLeft(toolbar);
+        borderPane.setTop(headPane);
+        AnchorPane.setRightAnchor(heading,0.0);
+        AnchorPane.setTopAnchor(heading,0.0);
 
-        statePane.getChildren().setAll(borderPane);
+        outerBox.getChildren().addAll(toolbar,borderPane);
+
+        statePane.getChildren().setAll(outerBox);
 
         stateScene = createScene(statePane);
 

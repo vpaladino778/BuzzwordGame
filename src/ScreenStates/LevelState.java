@@ -23,6 +23,7 @@ public class LevelState extends State{
     public void layoutGUI() {
         PropertyManager propertyManager = PropertyManager.getManager();
 
+        HBox outerBox = new HBox();
         statePane = new Pane();
         toolbar = new VBox();
         borderPane = new BorderPane();
@@ -34,7 +35,8 @@ public class LevelState extends State{
         toolbar.getChildren().setAll(homeButton);
         borderPane.setLeft(toolbar);
 
-        statePane.getChildren().setAll(borderPane);
+        outerBox.getChildren().addAll(toolbar,borderPane);
+        statePane.getChildren().setAll(outerBox);
         stateScene = createScene(statePane);
 
     }

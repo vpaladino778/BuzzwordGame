@@ -1,5 +1,5 @@
 .vbox {
-    -fx-background-color: aliceblue;
+    -fx-background-color: slategray;
     -fx-padding: 15;
     -fx-spacing: 15;
 }
@@ -18,10 +18,11 @@
 }
 .letternode{
     -fx-background-radius: 5em;
-    -fx-min-width: 30px;
-    -fx-min-height: 30px;
-    -fx-max-height: 30px;
-    -fx-max-width: 30px;
+    -fx-min-width: 60px;
+    -fx-min-height: 60px;
+    -fx-max-height: 60px;
+    -fx-max-width: 60px;
+    -fx-text-fill: whitesmoke;
     -fx-background-color:
             #000000,
             linear-gradient(#7ebcea, #2f4b8f),
