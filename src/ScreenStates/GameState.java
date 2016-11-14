@@ -14,6 +14,7 @@ public class GameState extends State{
     private Button homeButton;
     private VBox toolbar;
     private BorderPane borderPane;
+    private Button exitButton;
 
     private WordGrid wordGrid;
 
@@ -34,6 +35,8 @@ public class GameState extends State{
         toolbar.getStyleClass().add("vbox");
         toolbar.setPrefHeight(600);
 
+        exitButton = new Button("Exit");
+
         homeButton = new Button();
         homeButton.setText("Home");
 
@@ -41,7 +44,7 @@ public class GameState extends State{
         heading.getStyleClass().add("header-text");
 
 
-        toolbar.getChildren().setAll(homeButton);
+        toolbar.getChildren().setAll(homeButton,exitButton);
 
         AnchorPane headPane = new AnchorPane();
         headPane.getChildren().addAll(heading);
@@ -59,4 +62,5 @@ public class GameState extends State{
     }
 
     public Button getHomeButton(){ return homeButton; }
+    public Button getExitButton(){ return exitButton; }
 }

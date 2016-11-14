@@ -1,15 +1,10 @@
 package Display;
 
-import ScreenStates.GameState;
-import ScreenStates.LevelState;
-import ScreenStates.MenuState;
 import ScreenStates.StateController;
 import apptemplate.AppTemplate;
 import components.AppWorkspaceComponent;
 import controller.BuzzwordController;
 import javafx.scene.Scene;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import ui.AppGUI;
 
@@ -85,6 +80,10 @@ public class BuzzGUI extends AppWorkspaceComponent{
             stateController.getLevelState().getHomeButton().setOnAction(e->{
                         stateController.setCurrentState(stateController.getMenuState());
                         layoutGUI();
+                    }
+            );
+            stateController.getLevelState().getExitButton().setOnAction(e->{
+                        System.exit(0);
                     }
             );
             //Game screen
