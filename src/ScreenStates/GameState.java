@@ -82,7 +82,7 @@ public class GameState extends State{
 
         Text timeRemaining = new Text("Time Remaining: 40");
         Text target = new Text("Target: 75 pts");
-        Text totalScore = new Text("Total Score: 50");
+        Text totalScore = new Text("Total Score: 9");
         Text selectedLetters = new Text("Bu");
 
 

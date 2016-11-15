@@ -17,6 +17,8 @@ public class Level {
         levelID = id;
         isCompleted = false;
         levelButton = new Button(levelID + "");
+        levelButton.getStyleClass().add("letternode");
+
         isUnlocked = false;
         levelButton.setDisable(true);
         if(id == 1) {
