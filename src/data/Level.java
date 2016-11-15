@@ -21,7 +21,7 @@ public class Level {
         levelButton.setDisable(true);
         if(id == 1) {
             isUnlocked = true;
-            levelButton.setDisable(true);
+            levelButton.setDisable(false);
         }
 
     }

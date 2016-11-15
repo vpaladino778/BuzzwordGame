@@ -20,6 +20,7 @@ public class LevelState extends State{
     private String gamemode;
     private Text gamemodeText;
     private FlowPane flowPane;
+    private Button profileButton;
 
     //Gamemode Levels
     private ArrayList<Level> wordLevels;
@@ -76,6 +77,8 @@ public class LevelState extends State{
         gamemodeText = new Text();
         exitButton = new Button("Exit");
 
+        profileButton = new Button("Profile");
+
         HBox outerBox = new HBox();
         statePane = new Pane();
         toolbar = new VBox();
@@ -85,7 +88,7 @@ public class LevelState extends State{
         toolbar.getStyleClass().add("vbox");
         toolbar.setPrefHeight(600);
 
-        toolbar.getChildren().setAll(homeButton,exitButton);
+        toolbar.getChildren().setAll(homeButton,profileButton,exitButton);
         borderPane.setLeft(toolbar);
 
 
@@ -104,4 +107,5 @@ public class LevelState extends State{
     public Button getExitButton() {
         return exitButton;
     }
+    public Button getProfileButton(){ return profileButton; }
 }

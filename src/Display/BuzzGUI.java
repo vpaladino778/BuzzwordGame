@@ -73,7 +73,6 @@ public class BuzzGUI extends AppWorkspaceComponent{
                         if(!BuzzwordController.IsLoggedIn){
                             unpw = ProfileSingleton.getSingleton().showDialog();
                             BuzzwordController.IsLoggedIn = false;
-                            stateController.getMenuState().getLoginButton().setText(unpw.get().getValue());
                         }else{
                             ProfileSingleton.getSingleton().showDialog();
                         }
@@ -95,6 +94,10 @@ public class BuzzGUI extends AppWorkspaceComponent{
             );
             stateController.getLevelState().getExitButton().setOnAction(e->{
                         System.exit(0);
+                    }
+            );
+            stateController.getLevelState().getProfileButton().setOnAction(e->{
+                        //Open the profile screen
                     }
             );
             //Game screen
