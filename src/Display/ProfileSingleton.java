@@ -1,5 +1,8 @@
 package Display;
 
+import BuzzwordGame.Buzzword;
+import controller.BuzzwordController;
+import data.Profile;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -22,15 +25,13 @@ import java.util.Optional;
 public class ProfileSingleton extends Stage {
 
     private static ProfileSingleton singleton = null;
-    Dialog<Pair<String, String>> dialog;
+    private Dialog<Pair<String, String>> dialog;
+    private Alert profileAlert;
+    private Profile loggedInProfile;
 
-    private ProfileSingleton() { }
+    private ProfileSingleton() {
+    }
 
-    /**
-     * A static accessor method for getting the singleton object.
-     *
-     * @return The one singleton dialog of this object type.
-     */
     public static ProfileSingleton getSingleton() {
         if (singleton == null)
             singleton = new ProfileSingleton();
@@ -38,17 +39,20 @@ public class ProfileSingleton extends Stage {
     }
 
     public void init() {
-// Create the custom dialog.
+        //Init Profile Screen
+        profileAlert = new Alert(Alert.AlertType.NONE);
+        profileAlert.setTitle("Profile:");
+        // Create the custom dialog.
         dialog = new Dialog<>();
         dialog.setTitle("Login");
         dialog.setHeaderText("Please enter your profile details below");
 
 
-// Set the button types.
+        // Set the button types.
         ButtonType loginButtonType = new ButtonType("Login", ButtonBar.ButtonData.OK_DONE);
         dialog.getDialogPane().getButtonTypes().addAll(loginButtonType, ButtonType.CANCEL);
 
-// Create the username and password labels and fields.
+        // Create the username and password labels and fields.
         GridPane grid = new GridPane();
         grid.setHgap(10);
         grid.setVgap(10);
@@ -64,21 +68,21 @@ public class ProfileSingleton extends Stage {
         grid.add(new Label("Password:"), 0, 1);
         grid.add(password, 1, 1);
 
-// Enable/Disable login button depending on whether a username was entered.
+        // Enable/Disable login button depending on whether a username was entered.
         Node loginButton = dialog.getDialogPane().lookupButton(loginButtonType);
         loginButton.setDisable(true);
 
-// Do some validation (using the Java 8 lambda syntax).
+        // Do some validation
         username.textProperty().addListener((observable, oldValue, newValue) -> {
             loginButton.setDisable(newValue.trim().isEmpty());
         });
 
         dialog.getDialogPane().setContent(grid);
 
-// Request focus on the username field by default.
+        // Request focus on the username field by default.
         Platform.runLater(() -> username.requestFocus());
 
-// Convert the result to a username-password-pair when the login button is clicked.
+        // Convert the result to a username-password-pair when the login button is clicked.
         dialog.setResultConverter(dialogButton -> {
             if (dialogButton == loginButtonType) {
                 return new Pair<>(username.getText(), password.getText());
@@ -87,10 +91,15 @@ public class ProfileSingleton extends Stage {
         });
 
 
-
     }
 
-    public Optional<Pair<String,String>> showDialog() {
-        return dialog.showAndWait();
+    //If a profile is logged in, show the profile
+    public Optional<Pair<String, String>> showDialog() {
+        if (BuzzwordController.IsLoggedIn) {
+            profileAlert.showAndWait();
+            return null;
+        } else {
+            return dialog.showAndWait();
+        }
     }
 }

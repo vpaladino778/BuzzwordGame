@@ -1,11 +1,12 @@
 package ScreenStates;
 
+import data.Level;
 import javafx.scene.control.Button;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
+import javafx.scene.text.Text;
 import propertymanager.PropertyManager;
+
+import java.util.ArrayList;
 
 /**
  * Created by vpala on 11/9/2016.
@@ -16,18 +17,63 @@ public class LevelState extends State{
     private VBox toolbar;
     private BorderPane borderPane;
     private Button exitButton;
+    private String gamemode;
+    private Text gamemodeText;
+    private FlowPane flowPane;
+
+    //Gamemode Levels
+    private ArrayList<Level> wordLevels;
+    private ArrayList<Level> peopleLevels;
+    private ArrayList<Level> animalLevels;
 
     public LevelState(){
         super();
+        gamemode = "Words";
+        populateLevels();
         layoutGUI();
+
     }
 
+    private void populateLevels(){
+        wordLevels = new ArrayList<Level>();
+        peopleLevels = new ArrayList<Level>();
+        animalLevels = new ArrayList<Level>();
 
+        for(int i = 1; i <= 10; i ++){
+            wordLevels.add(new Level(i));
+        }
+        for(int i = 1; i <= 8; i ++){
+            peopleLevels.add(new Level(i));
+        }
+        for(int i = 1; i <= 6; i ++){
+            animalLevels.add(new Level(i));
+        }
+    }
+    public void displayLevel(ArrayList<Level> levels, FlowPane flow){
+        flow.getChildren().setAll(levels.get(0).getLevelButton());
+        for(int i = 1;  i < levels.size(); i++){
+            flow.getChildren().add(levels.get(i).getLevelButton());
+        }
 
+    }
+    public void setGamemode(String s){
+        gamemode = s;
+        if(gamemode.equalsIgnoreCase("people")){
+            gamemodeText.setText("People");
+            displayLevel(peopleLevels,flowPane);
+        }else if(gamemode.equalsIgnoreCase("animals")){
+            gamemodeText.setText("Animals");
+            displayLevel(animalLevels,flowPane);
+        }else{//Words - Default
+            gamemodeText.setText("Words");
+            displayLevel(wordLevels,flowPane);
+        }
+    }
     @Override
     public void layoutGUI() {
         PropertyManager propertyManager = PropertyManager.getManager();
-
+        flowPane = new FlowPane();
+        gamemodeText = new Text();
         exitButton = new Button("Exit");
 
         HBox outerBox = new HBox();
@@ -42,7 +88,11 @@ public class LevelState extends State{
         toolbar.getChildren().setAll(homeButton,exitButton);
         borderPane.setLeft(toolbar);
 
+
         outerBox.getChildren().addAll(toolbar,borderPane);
+        borderPane.setTop(gamemodeText);
+
+        borderPane.setCenter(flowPane);
         statePane.getChildren().setAll(outerBox);
         stateScene = createScene(statePane);
 

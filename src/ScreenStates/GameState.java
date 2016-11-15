@@ -1,7 +1,13 @@
 package ScreenStates;
 
 import Display.WordGrid;
+import javafx.beans.binding.Bindings;
 import javafx.scene.control.Button;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.ToggleButton;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import propertymanager.PropertyManager;
@@ -14,7 +20,10 @@ public class GameState extends State{
     private Button homeButton;
     private VBox toolbar;
     private BorderPane borderPane;
+    private VBox gameInfo;
     private Button exitButton;
+
+    private ToggleButton pauseButton;
 
     private WordGrid wordGrid;
 
@@ -28,6 +37,8 @@ public class GameState extends State{
     public void layoutGUI() {
         PropertyManager propertyManager = PropertyManager.getManager();
 
+        pauseButton = new ToggleButton();
+        gameInfo = new VBox();
         statePane = new Pane();
         toolbar = new VBox();
         HBox outerBox = new HBox();
@@ -40,11 +51,31 @@ public class GameState extends State{
         homeButton = new Button();
         homeButton.setText("Home");
 
+        Image playImage = new Image("images/play.png");
+        Image pauseImage = new Image("images/pause.png");
+        ImageView playPause = new ImageView();
+        pauseButton.setGraphic(playPause);
+        playPause.imageProperty().bind(Bindings
+        .when(pauseButton.selectedProperty())
+        .then(playImage)
+        .otherwise(pauseImage));
+
         Text heading = new Text("BuzzWord!");
         heading.getStyleClass().add("header-text");
 
+        Text timeRemaining = new Text("Time Remaining: 40");
+        Text target = new Text("Target: 75 pts");
+        Text selectedLetters = new Text("Bu");
+        TableView words = new TableView();
+        words.setEditable(false);
+        TableColumn guessC = new TableColumn("Word:");
+        TableColumn pointC = new TableColumn("Points:");
+        words.getColumns().addAll(guessC,pointC);
 
-        toolbar.getChildren().setAll(homeButton,exitButton);
+        gameInfo.getChildren().addAll(timeRemaining,selectedLetters,words,target);
+
+
+        toolbar.getChildren().setAll(homeButton,pauseButton,exitButton);
 
         AnchorPane headPane = new AnchorPane();
         headPane.getChildren().addAll(heading);
@@ -55,6 +86,7 @@ public class GameState extends State{
 
         outerBox.getChildren().addAll(toolbar,borderPane);
 
+        borderPane.setRight(gameInfo);
         statePane.getChildren().setAll(outerBox);
 
         stateScene = createScene(statePane);

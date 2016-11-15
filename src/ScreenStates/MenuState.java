@@ -25,6 +25,7 @@ public class MenuState extends State {
     private Button exitButton;
     private VBox toolbar;
     private HBox outerBox;
+    private ChoiceBox gameModeBox;
 
 
     public MenuState(){
@@ -33,6 +34,14 @@ public class MenuState extends State {
     }
 
 
+    public String getGameMode(){
+        if(gameModeBox == null){
+            return "Words";
+        }else{
+            return gameModeBox.getValue().toString();
+        }
+
+     }
     public void layoutGUI(){
         statePane = new Pane();
         mainBox = new VBox();
@@ -47,7 +56,7 @@ public class MenuState extends State {
         loginButton = new Button("Login");
         exitButton = new Button("Exit");
         borderPane = new BorderPane();
-        ChoiceBox gameModeBox = new ChoiceBox(FXCollections.observableArrayList("Words","People","Animals"));
+        gameModeBox = new ChoiceBox(FXCollections.observableArrayList("Words","People","Animals"));
         gameModeBox.setTooltip(new Tooltip("Select a gamemode"));
         gameModeBox.getSelectionModel().selectFirst();
 

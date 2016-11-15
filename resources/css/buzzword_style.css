@@ -20,15 +20,16 @@
     -fx-background-radius: 5em;
     -fx-min-width: 60px;
     -fx-min-height: 60px;
-    -fx-max-height: 60px;
-    -fx-max-width: 60px;
-    -fx-text-fill: whitesmoke;
-    -fx-background-color:
-            #000000,
-            linear-gradient(#7ebcea, #2f4b8f),
-            linear-gradient(#426ab7, #263e75),
-            linear-gradient(#395cab, #223768);
-    -fx-effect: dropshadow( one-pass-box , rgba(0,0,0,0.8) , 0, 0,0,1);
-
-
+-fx-max-height: 60px;
+-fx-max-width: 60px;
+-fx-text-fill: whitesmoke;
+-fx-background-color:
+#000000,
+linear-gradient(#7ebcea, #2f4b8f),
+linear-gradient(#426ab7, #263e75),
+linear-gradient(#395cab, #223768);
+-fx-effect: dropshadow( one-pass-box , rgba(0,0,0,0.8) , 0, 0,0,1);
+}
+.letternode:hover{
+    -fx-effect: dropshadow(gaussian, rgba(50,80,200,0.7), 1, 1, 1, 1);
 }

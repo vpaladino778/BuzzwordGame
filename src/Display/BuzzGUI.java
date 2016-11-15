@@ -6,7 +6,10 @@ import components.AppWorkspaceComponent;
 import controller.BuzzwordController;
 import javafx.scene.Scene;
 import javafx.scene.layout.VBox;
+import javafx.util.Pair;
 import ui.AppGUI;
+
+import java.util.Optional;
 
 /**
  * Created by vpala on 11/7/2016.
@@ -56,6 +59,7 @@ public class BuzzGUI extends AppWorkspaceComponent{
             //Menu Screen
             stateController.getMenuState().getLevelButton().setOnAction(e->{
                         stateController.setCurrentState(stateController.getLevelState());
+                        stateController.getLevelState().setGamemode(stateController.getMenuState().getGameMode());
                         layoutGUI();
                     }
             );
@@ -65,7 +69,14 @@ public class BuzzGUI extends AppWorkspaceComponent{
                     }
             );
             stateController.getMenuState().getLoginButton().setOnAction(e->{
-                        ProfileSingleton.getSingleton().showDialog();
+                Optional<Pair<String, String>> unpw;
+                        if(!BuzzwordController.IsLoggedIn){
+                            unpw = ProfileSingleton.getSingleton().showDialog();
+                            BuzzwordController.IsLoggedIn = false;
+                            stateController.getMenuState().getLoginButton().setText(unpw.get().getValue());
+                        }else{
+                            ProfileSingleton.getSingleton().showDialog();
+                        }
                     }
             );
             stateController.getMenuState().getCreateProfile().setOnAction(e->{
@@ -90,6 +101,10 @@ public class BuzzGUI extends AppWorkspaceComponent{
             stateController.getGameState().getHomeButton().setOnAction(e->{
                         stateController.setCurrentState(stateController.getMenuState());
                         layoutGUI();
+                    }
+            );
+            stateController.getGameState().getExitButton().setOnAction(e->{
+                        System.exit(0);
                     }
             );
     }

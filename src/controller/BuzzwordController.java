@@ -2,6 +2,7 @@ package controller;
 
 import ScreenStates.StateController;
 import apptemplate.AppTemplate;
+import data.Profile;
 
 import java.io.IOException;
 
@@ -11,6 +12,8 @@ import java.io.IOException;
 public class BuzzwordController implements FileController{
 
     private StateController stateController;
+    public static boolean IsLoggedIn = false;
+    private Profile profile;
 
     public BuzzwordController(AppTemplate appTemplate){
 
@@ -37,5 +40,9 @@ public class BuzzwordController implements FileController{
     @Override
     public void handleExitRequest() {
 
+    }
+
+    public Profile getProfile(){
+        return profile;
     }
 }
