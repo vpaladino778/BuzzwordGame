@@ -25,6 +25,43 @@ public class WordGrid {
         populateGrid(letterList);
     }
 
+    public void clearLetters(ArrayList<LetterNode> letters){
+        for(LetterNode l: letters){
+            l.setLetter((char) 45);
+        }
+    }
+
+
+
+    public boolean insertWord(String word){
+        //Do stuff and work
+        //Do what i want it to do
+        return true;
+    }
+
+
+
+
+    public ArrayList<LetterNode> nearbyNodes(int height, int width, ArrayList<LetterNode> list, int index){
+        ArrayList<LetterNode> nearby = new ArrayList<LetterNode>();
+        //Check Right
+        if (index + 1 < width ) {
+
+        }
+        //Check left
+        if(index - 1 > 0){
+
+        }
+        //Check above
+
+        return null;
+    }
+
+    //Returns index in arraylist of coordinate
+    public int getCoord(int x, int y, ArrayList<LetterNode> list){
+        int index = (y * gridHeight) + x;
+        return index;
+    }
     public void populateGrid(ArrayList<LetterNode> nL){
         int node = 0;
         for(int i = 0; i < gridWidth; i++){

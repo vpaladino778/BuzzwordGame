@@ -2,7 +2,6 @@ package Display;
 
 import javafx.geometry.Insets;
 import javafx.scene.control.ToggleButton;
-import javafx.scene.effect.DropShadow;
 import javafx.scene.layout.StackPane;
 
 import java.util.concurrent.ThreadLocalRandom;
@@ -43,6 +42,8 @@ public class LetterNode {
         char c = (char) ThreadLocalRandom.current().nextInt(65,91);
         return c;
     }
+
+    public void setLetter(char c){ letter = c;}
 
     public char getLetter() {
         return letter;
