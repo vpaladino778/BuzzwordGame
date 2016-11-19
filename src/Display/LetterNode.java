@@ -21,7 +21,8 @@ public class LetterNode {
     public LetterNode(char let){
         letter = let;
         buttonPane = new StackPane();
-        button = new ToggleButton(String.valueOf(letter));
+        button = new ToggleButton();
+        button.setText(String.valueOf(letter));
         button.getStyleClass().setAll("letternode");
         buttonPane.getChildren().setAll(button);
         buttonPane.setPadding(new Insets(10));
@@ -43,7 +44,10 @@ public class LetterNode {
         return c;
     }
 
-    public void setLetter(char c){ letter = c;}
+    public void setLetter(char c){
+        letter = c;
+        button.setText(String.valueOf(c));
+    }
 
     public char getLetter() {
         return letter;

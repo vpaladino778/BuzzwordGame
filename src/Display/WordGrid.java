@@ -19,10 +19,13 @@ public class WordGrid {
         gridHeight = h;
         gridWidth = w;
         nodeGrid = new GridPane();
+        letterList = new ArrayList<LetterNode>();
         actualNodes = new ArrayList<LetterNode>();
 
-        populateGrid(letterList);
-        //insertWord("swag");
+        populateGrid(actualNodes);
+        clearLetters(actualNodes);
+        insertWord("swag");
+        insertWord("dog");
     }
 
     public void clearLetters(ArrayList<LetterNode> letters){
@@ -42,16 +45,17 @@ public class WordGrid {
         }
 
         if((start = randomEmptyIndex(newList) ) != -1){
-            ArrayList<LetterNode>nearbyNodes = nearbyNodes(gridHeight,gridWidth,newList, start);
-            int randInt;
+            ArrayList<LetterNode>nearbyNodes;
+            int randInt = 0;
             newList.get(start).setLetter(word.charAt(0));
             for(int i = 1; i < word.length(); i++){
+                nearbyNodes = nearbyNodes(gridHeight,gridWidth,newList, start);
                 if(nearbyNodes.size() <= 0){
                     return false;
                 }
-                randInt = (int)(Math.random() * (nearbyNodes.size()));
                 LetterNode next = null;
                 while(next == null){ //Select random nearby
+                    randInt = (int)(Math.random() * (nearbyNodes.size() - 1));
                     next = nearbyNodes.get(randInt);
                 }
                 if(randInt == 0 ){      //Right
@@ -73,25 +77,30 @@ public class WordGrid {
 
         }else{
             //Cant find random empty slot
+            System.out.println("Insert Word Failed");
             return false;
         }
 
-        actualNodes = newList;
+        //Copy new list into actual list
+        for(int i = 0; i < newList.size(); i++){
+            actualNodes.get(i).setLetter(newList.get(i).getLetter());
+        }
         return true;
     }
 
     //Returns -1 if there it cannot find an index after 10 tries;
     public int randomEmptyIndex(ArrayList<LetterNode> list){
         int numTries = 0;
-        int randInt = (int)(Math.random() * (list.size() + 1));
-        char c = '-';
-        int index = 0;
+        int randInt = (int)(Math.random() * (list.size()));
+        char c = list.get(randInt).getLetter();
+        int index = randInt;
         while(c != '-' && numTries < 10){
             numTries++;
             c = list.get(randInt).getLetter();
             index = randInt;
+            randInt = (int)(Math.random() * (list.size()));
         }
-        if(numTries >= 10 && c == '-'){
+        if(numTries >= 10 && c != '-'){
             return -1;
         }
         return index;
@@ -100,25 +109,25 @@ public class WordGrid {
     public ArrayList<LetterNode> nearbyNodes(int height, int width, ArrayList<LetterNode> list, int index){
         ArrayList<LetterNode> nearby = new ArrayList<LetterNode>();
         //Check Right
-        if (getRight(index) != -1) {
+        if (getRight(index) != -1 && list.get(getRight(index)).getLetter() == '-') {
             nearby.add(list.get(getRight(index)));
         }else {
             nearby.add(null);
         }
         //Check left
-        if(getLeft(index) != -1){
+        if(getLeft(index) != -1 && list.get(getLeft(index)).getLetter() == '-'){
             nearby.add(list.get(getLeft(index)));
         }else {
             nearby.add(null);
         }
         //Check above
-        if(getAbove(index) != -1){ //If index is in the top row
+        if(getAbove(index) != -1 && list.get(getAbove(index)).getLetter() == '-'){ //If index is in the top row
             nearby.add(list.get(getAbove(index)));
         }else {
             nearby.add(null);
         }
         //Check below
-        if(getBelow(index) != -1 ){ // If index is in the bottom row
+        if(getBelow(index) != -1 && list.get(getBelow(index)).getLetter() == '-'){ // If index is in the bottom row
             nearby.add(list.get(getBelow(index)));
         }else {
             nearby.add(null);
@@ -131,7 +140,7 @@ public class WordGrid {
         int node = 0;
         for(int i = 0; i < gridWidth; i++){
             for( int j = 0 ; j < gridHeight; j++){
-                if(letterList == null || node > letterList.size() || letterList.get(node) == null){
+                /*if(node > letterList.size() || letterList.get(node) == null){
                     LetterNode letNode= new LetterNode('-');
                     actualNodes.add(letNode);
                     nodeGrid.add(letNode.getButtonPane(),i,j);
@@ -139,10 +148,15 @@ public class WordGrid {
                     nodeGrid.add(letterList.get(node).getButtonPane(),i,j);
                     actualNodes.add(letterList.get(node));
                     node++;
-                }
+                }*/
+                LetterNode letterNode = new LetterNode((char) (node + '0'));
+                actualNodes.add(letterNode);
+                nodeGrid.add(letterNode.getButtonPane(),j,i);
+                node++;
             }
         }
     }
+
 
     //Gets index of relative to index i. Returns Null if invalid
     public int getRight(int i){
@@ -167,7 +181,7 @@ public class WordGrid {
         }
     }
     public int getBelow(int i){
-        if(i < ((gridWidth) * (gridHeight -1)) - 1 ){
+        if(i < ((gridWidth) * (gridHeight -1)) ){
             return i + gridWidth;
         }else{
             return -1;
