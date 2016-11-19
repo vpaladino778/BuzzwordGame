@@ -44,7 +44,7 @@ public class WordGrid {
 
     public ArrayList<LetterNode> nearbyNodes(int height, int width, ArrayList<LetterNode> list, int index){
         ArrayList<LetterNode> nearby = new ArrayList<LetterNode>();
-        //Check Right
+        //Check Right bhg
         if (index + 1 < width ) {
 
         }
