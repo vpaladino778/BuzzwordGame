@@ -33,6 +33,7 @@ public class WordGrid {
     }
 
     //Return false if it cannot insert the word
+    //Comment
     public boolean insertWord(String word){
         int start;
         //Avoids directly modifying list incase insertion fails
