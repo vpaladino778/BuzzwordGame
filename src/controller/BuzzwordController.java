@@ -5,6 +5,7 @@ import apptemplate.AppTemplate;
 import data.Profile;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  * Created by vpala on 11/7/2016.
@@ -12,6 +13,7 @@ import java.io.IOException;
 public class BuzzwordController implements FileController{
 
     private StateController stateController;
+    private ArrayList<Profile> profiles;
     public static boolean IsLoggedIn = false;
     private Profile profile;
 

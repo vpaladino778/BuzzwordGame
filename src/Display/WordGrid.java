@@ -1,6 +1,7 @@
 package Display;
 
 import javafx.scene.layout.GridPane;
+
 import java.util.ArrayList;
 
 /**
@@ -12,7 +13,6 @@ public class WordGrid {
     private GridPane nodeGrid;
 
     private ArrayList<LetterNode> letterList;
-
     private ArrayList<LetterNode> actualNodes;
 
     public WordGrid(int w, int h){
@@ -24,8 +24,6 @@ public class WordGrid {
 
         populateGrid(actualNodes);
         clearLetters(actualNodes);
-        insertWord("swag");
-        insertWord("dog");
     }
 
     public void clearLetters(ArrayList<LetterNode> letters){

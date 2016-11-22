@@ -41,13 +41,13 @@ public class LevelState extends State{
         animalLevels = new ArrayList<Level>();
 
         for(int i = 1; i <= 10; i ++){
-            wordLevels.add(new Level(i));
+            wordLevels.add(new Level(i,i));
         }
         for(int i = 1; i <= 8; i ++){
-            peopleLevels.add(new Level(i));
+            peopleLevels.add(new Level(i,i));
         }
         for(int i = 1; i <= 6; i ++){
-            animalLevels.add(new Level(i));
+            animalLevels.add(new Level(i,i));
         }
     }
     public void displayLevel(ArrayList<Level> levels, FlowPane flow){
