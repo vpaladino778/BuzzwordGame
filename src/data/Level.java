@@ -14,7 +14,6 @@ public class Level {
     private boolean isUnlocked;
     private boolean isCompleted;
     private boolean wordGrid;
-
     private int maxWordLength;
     private int levelDifficulty; //The higher this is, the more large words will be placed into the grid Default: 1
 
