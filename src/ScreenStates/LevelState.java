@@ -41,7 +41,9 @@ public class LevelState extends State{
         animalLevels = new ArrayList<Level>();
 
         for(int i = 1; i <= 10; i ++){
-            wordLevels.add(new Level(i,i));
+            Level wordLevel = new Level(i,i);
+            wordLevels.add(wordLevel);
+
         }
         for(int i = 1; i <= 8; i ++){
             peopleLevels.add(new Level(i,i));
@@ -70,6 +72,7 @@ public class LevelState extends State{
             displayLevel(wordLevels,flowPane);
         }
     }
+    public String getGamemode(){ return gamemode; }
     @Override
     public void layoutGUI() {
         PropertyManager propertyManager = PropertyManager.getManager();
@@ -108,4 +111,16 @@ public class LevelState extends State{
         return exitButton;
     }
     public Button getProfileButton(){ return profileButton; }
+
+    public ArrayList<Level> getWordLevels() {
+        return wordLevels;
+    }
+
+    public ArrayList<Level> getPeopleLevels() {
+        return peopleLevels;
+    }
+
+    public ArrayList<Level> getAnimalLevels() {
+        return animalLevels;
+    }
 }

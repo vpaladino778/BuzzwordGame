@@ -4,11 +4,13 @@ import ScreenStates.StateController;
 import apptemplate.AppTemplate;
 import components.AppWorkspaceComponent;
 import controller.BuzzwordController;
+import data.Level;
 import javafx.scene.Scene;
 import javafx.scene.layout.VBox;
 import javafx.util.Pair;
 import ui.AppGUI;
 
+import java.util.ArrayList;
 import java.util.Optional;
 
 /**
@@ -63,6 +65,16 @@ public class BuzzGUI extends AppWorkspaceComponent{
                         layoutGUI();
                     }
             );
+            //Level button Handlers
+            ArrayList<Level> wordLevels = stateController.getLevelState().getWordLevels();
+            for( Level level: wordLevels){
+                level.getLevelButton().setOnAction(e ->{
+                    stateController.getGameState().setCurrentLevel(level);
+                    level.generateLevel(stateController.getGameState().getWordGrid(),40);
+                    stateController.setCurrentState(stateController.getGameState());
+                    layoutGUI();
+                });
+            }
             stateController.getMenuState().getPlayButton().setOnAction(e->{
                         stateController.setCurrentState(stateController.getGameState());
                         layoutGUI();

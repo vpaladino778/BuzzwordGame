@@ -110,4 +110,6 @@ public class GameState extends State{
 
     public Button getHomeButton(){ return homeButton; }
     public Button getExitButton(){ return exitButton; }
+    public void setCurrentLevel(Level lvl){ currentLevel = lvl;   }
+    public WordGrid getWordGrid(){return wordGrid;}
 }

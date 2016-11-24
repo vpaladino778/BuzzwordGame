@@ -22,7 +22,6 @@ public class WordGrid {
         letterList = new ArrayList<LetterNode>();
         actualNodes = new ArrayList<LetterNode>();
 
-        populateGrid(actualNodes);
         clearLetters(actualNodes);
     }
 
@@ -148,7 +147,7 @@ public class WordGrid {
                     actualNodes.add(letterList.get(node));
                     node++;
                 }*/
-                LetterNode letterNode = new LetterNode((char) (node + '0'));
+                LetterNode letterNode = new LetterNode('-');
                 actualNodes.add(letterNode);
                 nodeGrid.add(letterNode.getButtonPane(),j,i);
                 node++;
