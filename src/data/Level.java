@@ -3,8 +3,11 @@ package data;
 import Display.WordGrid;
 import javafx.scene.control.Button;
 
+import javax.annotation.Resources;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.*;
 
 /**
@@ -13,10 +16,10 @@ import java.util.*;
 public class Level {
 
     //Word Set
-    public static Set<String> wordList;
-    public static Set<String> peopleList;
-    public static Set<String> animalList;
-    public static Set<String> currentSet;
+    public static ArrayList<String> wordList;
+    public static ArrayList<String> peopleList;
+    public static ArrayList<String> animalList;
+    public static ArrayList<String> currentSet;
 
     private int levelID;
     private String gamemode;
@@ -40,7 +43,6 @@ public class Level {
             isUnlocked = true;
             levelButton.setDisable(false);
         }
-
     }
 
     public void setUnlocked(boolean b){
@@ -63,10 +65,10 @@ public class Level {
         int minLength = maxWordLength;
         int maxLength = maxWordLength;
             if(gamemode.equalsIgnoreCase("words")){
-                if(Level.loadDictionary("words.txt")){
+                if(Level.loadDictionary("dictionary/words.txt")){
                     currentSet = wordList;
                     for(int i = 0; i < levelDifficulty; i++){
-                        String randWord = getRandomWord((HashSet)currentSet,minLength, maxLength);
+                        String randWord = getRandomWord(currentSet,minLength, maxLength);
                         if(grid.insertWord(randWord)){
                             actualScore += Level.calcWordScore(randWord);
                             levelDifficulty--;
@@ -88,49 +90,39 @@ public class Level {
     public static boolean loadDictionary(String dictionary) {
         Scanner dict = null;
         try {
-            dict = new Scanner(new File(dictionary));
+            File dictFile = new File(Level.class.getResource(dictionary).getFile());
+            dict = new Scanner(dictFile);
+
         } catch (FileNotFoundException e) {
             e.printStackTrace();
-            return false;
         }
-        wordList = new HashSet<String>();
+        wordList = new ArrayList<>();
         while(dict.hasNext()){
-            if(dict.next().indexOf("'") == -1) { //If it contains no apostrophes
-                wordList.add(dict.next().trim().toLowerCase());
+            String next = dict.next();
+            if(next.indexOf("'") == -1 && next.length() >= 3) { //If it contains no apostrophes and is longer than 3 words
+                wordList.add(next.trim().toLowerCase());
             }
         }
         return true;
     }
 
     //Gets random word within set
-    public static String getRandomWord(HashSet<String> set){
+    public static String getRandomWord(ArrayList<String> set){
         int rand = new Random().nextInt(set.size());
-        int i = 0;
-        for(String obj: set){
-            if(i == rand)
-                return obj;
-            i++;
-        }
-        return null;
+        return set.get(rand);
     }
 
     //Returns a random word with a length between minLen and maxLen
-    public static String getRandomWord(HashSet<String> set, int minLen, int maxLen){
-        int rand = new Random().nextInt(set.size());
-        int i = 0;
-        for(String obj: set){
-            if(i == rand) {
-                if(obj.length() >= minLen && obj.length() <= maxLen) {
-                    return obj;
-                }else{
-                    getRandomWord(set,minLen,maxLen);
-                }
+    public static String getRandomWord(ArrayList<String> set, int minLen, int maxLen){
+        String randWord = getRandomWord(set);
 
-            }
-                i++;
+        while(randWord.length() < minLen || randWord.length() > maxLen){
+            randWord = getRandomWord(set);
         }
-        return null;
+        return randWord;
+
     }
+
     public static int calcWordScore(String word){
         int score = 0;
         for(int i = word.length(); i == 0; i--){
