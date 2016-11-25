@@ -1,14 +1,10 @@
 package data;
 
+import Display.LetterNode;
 import Display.WordGrid;
 import javafx.scene.control.Button;
 
-import javax.annotation.Resources;
-import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.InputStream;
-import java.net.URL;
-import java.util.*;
 
 /**
  * Created by vpala on 11/14/2016.
@@ -16,11 +12,9 @@ import java.util.*;
 public class Level {
 
     //Word Set
-    public static ArrayList<String> wordList;
-    public static ArrayList<String> peopleList;
-    public static ArrayList<String> animalList;
-    public static ArrayList<String> currentSet;
 
+
+    private Dictionary currentDictionary;
     private int levelID;
     private String gamemode;
     private Button levelButton;
@@ -30,8 +24,11 @@ public class Level {
     private int levelDifficulty; //The higher this is, the more large words will be placed into the grid Default: 1
 
     public Level(int id, int maxWordLength){
-        levelDifficulty = 1;
+        currentDictionary = new Dictionary();
+        levelDifficulty = id + maxWordLength;
         this.maxWordLength = maxWordLength;
+        if(maxWordLength < 3)
+            maxWordLength = 3;
         gamemode = "words";
         levelID = id;
         isCompleted = false;
@@ -65,62 +62,36 @@ public class Level {
         int minLength = maxWordLength;
         int maxLength = maxWordLength;
             if(gamemode.equalsIgnoreCase("words")){
-                if(Level.loadDictionary("dictionary/words.txt")){
-                    currentSet = wordList;
-                    for(int i = 0; i < levelDifficulty; i++){
-                        String randWord = getRandomWord(currentSet,minLength, maxLength);
-                        if(grid.insertWord(randWord)){
+                try {
+                    currentDictionary.loadDictionary("dictionary/commonWords.txt");
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+
+                for(int i = 0; i < levelDifficulty; i++) {
+                        String randWord = currentDictionary.getRandomWord(currentDictionary.getWordList(), minLength, maxLength);
+                        if (grid.insertWord(randWord)) {
                             actualScore += Level.calcWordScore(randWord);
+                            System.out.println("Inserting word:" + randWord);
                             levelDifficulty--;
-                            if(minLength > 3 && maxLength > 3) {
+                            if (minLength > 3 && maxLength > 3) {
                                 minLength--;
                                 maxLength--;
                             }
                         }
-
                     }
-                }else{
-                    System.out.println("Cannot load dictionary");
-                }
             }
+
+        fillEmptySpace(grid);
         return actualScore;
     }
 
-    //Loads dictionary at location returns false if the file is not found
-    public static boolean loadDictionary(String dictionary) {
-        Scanner dict = null;
-        try {
-            File dictFile = new File(Level.class.getResource(dictionary).getFile());
-            dict = new Scanner(dictFile);
-
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        wordList = new ArrayList<>();
-        while(dict.hasNext()){
-            String next = dict.next();
-            if(next.indexOf("'") == -1 && next.length() >= 3) { //If it contains no apostrophes and is longer than 3 words
-                wordList.add(next.trim().toLowerCase());
+    public void fillEmptySpace(WordGrid grid){
+        for(LetterNode node : grid.getActualNodes()){
+            if(node.getLetter() == '-'){
+                node.setLetter(node.randomLetter());
             }
         }
-        return true;
-    }
-
-    //Gets random word within set
-    public static String getRandomWord(ArrayList<String> set){
-        int rand = new Random().nextInt(set.size());
-        return set.get(rand);
-    }
-
-    //Returns a random word with a length between minLen and maxLen
-    public static String getRandomWord(ArrayList<String> set, int minLen, int maxLen){
-        String randWord = getRandomWord(set);
-
-        while(randWord.length() < minLen || randWord.length() > maxLen){
-            randWord = getRandomWord(set);
-        }
-        return randWord;
-
     }
 
     public static int calcWordScore(String word){

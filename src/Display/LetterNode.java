@@ -40,7 +40,7 @@ public class LetterNode {
 
     //Generates a random letter from A-Z
     public char randomLetter(){
-        char c = (char) ThreadLocalRandom.current().nextInt(65,91);
+        char c = (char) ThreadLocalRandom.current().nextInt(65,90);
         return c;
     }
 

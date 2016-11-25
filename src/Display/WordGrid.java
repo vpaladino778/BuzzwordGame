@@ -12,16 +12,15 @@ public class WordGrid {
     private int gridHeight;
     private GridPane nodeGrid;
 
-    private ArrayList<LetterNode> letterList;
     private ArrayList<LetterNode> actualNodes;
 
     public WordGrid(int w, int h){
         gridHeight = h;
         gridWidth = w;
         nodeGrid = new GridPane();
-        letterList = new ArrayList<LetterNode>();
         actualNodes = new ArrayList<LetterNode>();
 
+        populateGrid(actualNodes);
         clearLetters(actualNodes);
     }
 
@@ -32,7 +31,6 @@ public class WordGrid {
     }
 
     //Return false if it cannot insert the word
-    //Comment
     public boolean insertWord(String word){
         int start;
         //Avoids directly modifying list incase insertion fails
@@ -45,7 +43,7 @@ public class WordGrid {
         if((start = randomEmptyIndex(newList) ) != -1){
             ArrayList<LetterNode>nearbyNodes;
             int randInt = 0;
-            newList.get(start).setLetter(word.charAt(0));
+            newList.get(start).setLetter(Character.toUpperCase(word.charAt(0)));
             for(int i = 1; i < word.length(); i++){
                 nearbyNodes = nearbyNodes(gridHeight,gridWidth,newList, start);
                 if(nearbyNodes.size() <= 0){
@@ -53,21 +51,21 @@ public class WordGrid {
                 }
                 LetterNode next = null;
                 while(next == null){ //Select random nearby
-                    randInt = (int)(Math.random() * (nearbyNodes.size() - 1));
+                    randInt = (int)(Math.random() * (nearbyNodes.size()));
                     next = nearbyNodes.get(randInt);
                 }
                 if(randInt == 0 ){      //Right
                     start = getRight(start);
-                    newList.get(start).setLetter(word.charAt(i));
+                    newList.get(start).setLetter(Character.toUpperCase(word.charAt(i)));
                 }else if(randInt == 1){ //Left
                     start = getLeft(start);
-                    newList.get(start).setLetter(word.charAt(i));
+                    newList.get(start).setLetter(Character.toUpperCase(word.charAt(i)));
                 }else if(randInt == 2){ //Above
                     start = getAbove(start);
-                    newList.get(start).setLetter(word.charAt(i));
+                    newList.get(start).setLetter(Character.toUpperCase(word.charAt(i)));
                 }else if(randInt == 3){ //Below
                     start = getBelow(start);
-                    newList.get(start).setLetter(word.charAt(i));
+                    newList.get(start).setLetter(Character.toUpperCase(word.charAt(i)));
                 }else{
                     return false;
                 }
@@ -138,15 +136,6 @@ public class WordGrid {
         int node = 0;
         for(int i = 0; i < gridWidth; i++){
             for( int j = 0 ; j < gridHeight; j++){
-                /*if(node > letterList.size() || letterList.get(node) == null){
-                    LetterNode letNode= new LetterNode('-');
-                    actualNodes.add(letNode);
-                    nodeGrid.add(letNode.getButtonPane(),i,j);
-                }else{
-                    nodeGrid.add(letterList.get(node).getButtonPane(),i,j);
-                    actualNodes.add(letterList.get(node));
-                    node++;
-                }*/
                 LetterNode letterNode = new LetterNode('-');
                 actualNodes.add(letterNode);
                 nodeGrid.add(letterNode.getButtonPane(),j,i);
@@ -196,5 +185,7 @@ public class WordGrid {
     public GridPane getNodeGrid() {
         return nodeGrid;
     }
+
+    public ArrayList<LetterNode> getActualNodes() {return actualNodes; }
 
 }

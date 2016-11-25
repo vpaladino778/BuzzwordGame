@@ -40,11 +40,13 @@ public class LevelState extends State{
         peopleLevels = new ArrayList<Level>();
         animalLevels = new ArrayList<Level>();
 
-        for(int i = 1; i <= 10; i ++){
-            Level wordLevel = new Level(i,i);
-            wordLevels.add(wordLevel);
 
-        }
+        wordLevels.add( new Level(1,4));
+        wordLevels.add( new Level(2,5));
+        wordLevels.add( new Level(3,6));
+        wordLevels.add( new Level(4,6));
+        wordLevels.add( new Level(5,6));
+
         for(int i = 1; i <= 8; i ++){
             peopleLevels.add(new Level(i,i));
         }
