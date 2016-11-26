@@ -23,6 +23,7 @@ public class Level {
     private int maxWordLength;
     private int levelDifficulty; //The higher this is, the more large words will be placed into the grid Default: 1
 
+    private int targetScore;
     public Level(int id, int maxWordLength){
         currentDictionary = new Dictionary();
         levelDifficulty = id + maxWordLength;
@@ -32,7 +33,7 @@ public class Level {
         gamemode = "words";
         levelID = id;
         isCompleted = false;
-        levelButton = new Button(levelID + "");
+        levelButton = new Button(Integer.toString(levelID));
         levelButton.getStyleClass().add("letternode");
         isUnlocked = false;
         levelButton.setDisable(true);
@@ -57,7 +58,7 @@ public class Level {
     }
 
     //Generates level as close to the target score
-    public int generateLevel(WordGrid grid, int targetScore){
+    public int generateLevel(WordGrid grid){
         int actualScore = 0;
         int minLength = maxWordLength;
         int maxLength = maxWordLength;
@@ -83,6 +84,7 @@ public class Level {
             }
 
         fillEmptySpace(grid);
+        targetScore = actualScore;
         return actualScore;
     }
 
@@ -96,12 +98,14 @@ public class Level {
 
     public static int calcWordScore(String word){
         int score = 0;
-        for(int i = word.length(); i == 0; i--){
+        for(int i = word.length(); i > 0; i--){
             score += i;
         }
         return score;
     }
 
+
+    public int getLevelID(){ return levelID; }
     public Button getLevelButton(){ return levelButton;}
 
     public int getMaxWordLength() {
@@ -119,4 +123,6 @@ public class Level {
     public void setLevelDifficulty(int levelDifficulty) {
         this.levelDifficulty = levelDifficulty;
     }
+
+
 }

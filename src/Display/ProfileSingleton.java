@@ -1,22 +1,21 @@
 package Display;
 
-import BuzzwordGame.Buzzword;
 import controller.BuzzwordController;
+import data.GameData;
+import data.Level;
 import data.Profile;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
-import javafx.stage.Modality;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Pair;
-import settings.InitializationParameters;
-import ui.AppMessageDialogSingleton;
 
+import java.util.ArrayList;
 import java.util.Optional;
 
 /**
@@ -26,8 +25,10 @@ public class ProfileSingleton extends Stage {
 
     private static ProfileSingleton singleton = null;
     private Dialog<Pair<String, String>> dialog;
+    private GameData gameData;
     private Alert profileAlert;
     private Profile loggedInProfile;
+    private PasswordField password;
 
     private ProfileSingleton() {
     }
@@ -41,7 +42,7 @@ public class ProfileSingleton extends Stage {
     public void init() {
         //Init Profile Screen
         profileAlert = new Alert(Alert.AlertType.NONE);
-        profileAlert.setTitle("Profile:");
+        profileAlert.setTitle("User Profile");
         // Create the custom dialog.
         dialog = new Dialog<>();
         dialog.setTitle("Login");
@@ -60,7 +61,7 @@ public class ProfileSingleton extends Stage {
 
         TextField username = new TextField();
         username.setPromptText("Username");
-        PasswordField password = new PasswordField();
+        password = new PasswordField();
         password.setPromptText("Password");
 
         grid.add(new Label("Username:"), 0, 0);
@@ -96,10 +97,41 @@ public class ProfileSingleton extends Stage {
     //If a profile is logged in, show the profile
     public Optional<Pair<String, String>> showDialog() {
         if (BuzzwordController.IsLoggedIn) {
+            profileAlert = new Alert(Alert.AlertType.NONE);
+            buildProfileAlert(profileAlert);
             profileAlert.showAndWait();
             return null;
         } else {
-            return dialog.showAndWait();
+            Optional<Pair<String, String>> info = dialog.showAndWait();
+            password.clear();
+            return info;
         }
+    }
+
+    private void buildProfileAlert(Alert alert){
+        loggedInProfile = gameData.getLoggedIn();
+        alert.setTitle(loggedInProfile.getUsername() + "'s Profile");
+        VBox alertVBox = new VBox();
+        Text username = new Text(loggedInProfile.getUsername() + ":");
+        username.setFont(Font.font(30));
+        Text wordCompleted = new Text("Word Levels Completed: " + getLevelsCompleted(loggedInProfile.getWordLevelsCompleted()));
+        Text animalsCompleted = new Text("Animals Levels Completed: " + getLevelsCompleted(loggedInProfile.getAnimalLevelsCompleted()));
+        Text peopleCompleted = new Text("People Levels Completed: " + getLevelsCompleted(loggedInProfile.getPeopleLevelsCompleted()));
+        alertVBox.getChildren().addAll(username,wordCompleted,animalsCompleted,peopleCompleted);
+        alert.getDialogPane().setContent(alertVBox);
+        alert.getButtonTypes().addAll(ButtonType.OK);
+
+
+    }
+
+    private String getLevelsCompleted(ArrayList<Level> level){
+        StringBuilder completed = new StringBuilder();
+        for (Level l : level){
+            completed.append(l.getLevelID() + ", ");
+        }
+        return completed.toString();
+    }
+    public void setGameData(GameData gameData){
+        this.gameData = gameData;
     }
 }

@@ -15,6 +15,8 @@ import java.util.Optional;
 public class CreateProfileSingleton {
     private static CreateProfileSingleton singleton = null;
     Dialog<Pair<String, String>> dialog;
+    private TextField username;
+    private PasswordField password;
 
     private CreateProfileSingleton() { }
 
@@ -46,19 +48,16 @@ public class CreateProfileSingleton {
         grid.setVgap(10);
         grid.setPadding(new Insets(20, 150, 10, 10));
 
-        TextField username = new TextField();
+        username = new TextField();
         username.setPromptText("Username");
-        PasswordField password = new PasswordField();
+        password = new PasswordField();
         password.setPromptText("Password");
-        PasswordField passwordConfirm = new PasswordField();
-        password.setPromptText("Confirm Password");
 
         grid.add(new Label("Username:"), 0, 0);
         grid.add(username, 1, 0);
         grid.add(new Label("Password:"), 0, 1);
         grid.add(password, 1, 1);
-        grid.add(new Label("Confirm Password:"), 0, 2);
-        grid.add(passwordConfirm, 1, 2);
+
 
 // Enable/Disable login button depending on whether a username was entered.
         Node loginButton = dialog.getDialogPane().lookupButton(createButtonType);
@@ -87,6 +86,9 @@ public class CreateProfileSingleton {
     }
 
     public Optional<Pair<String,String>> showDialog() {
-        return dialog.showAndWait();
+        Optional<Pair<String,String>> info = dialog.showAndWait();
+        username.clear();
+        password.clear();
+        return info;
     }
 }

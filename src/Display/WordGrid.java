@@ -186,6 +186,7 @@ public class WordGrid {
         return nodeGrid;
     }
 
+
     public ArrayList<LetterNode> getActualNodes() {return actualNodes; }
 
 }

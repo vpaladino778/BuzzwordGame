@@ -25,6 +25,7 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
+import static settings.AppPropertyType.APP_LOGO;
 import static settings.InitializationParameters.APP_IMAGEDIR_PATH;
 
 /**
@@ -157,14 +158,14 @@ public class AppGUI implements AppStyleArbiter {
                                                                              appWindowWidth,
                                                                              appWindowHeight);
 
-        URL imgDirURL = AppTemplate.class.getClassLoader().getResource(APP_IMAGEDIR_PATH.getParameter());
-        /*if (imgDirURL == null)
+        URL imgDirURL = AppTemplate.class.getClassLoader().getResource("images");
+        if (imgDirURL == null)
             throw new FileNotFoundException("Image resources folder does not exist.");
         try (InputStream appLogoStream = Files.newInputStream(Paths.get(imgDirURL.toURI()).resolve(propertyManager.getPropertyValue(APP_LOGO)))) {
             primaryStage.getIcons().add(new Image(appLogoStream));
         } catch (URISyntaxException e) {
             e.printStackTrace();
-        }*/
+        }
 
         primaryStage.setScene(primaryScene);
         primaryStage.show();

@@ -29,11 +29,16 @@ public class GameState extends State{
     private Button exitButton;
     private Level currentLevel;
     private ToggleButton pauseButton;
+    private int targetScore;
+    private Text target;
+
+    private boolean paused;
 
     private WordGrid wordGrid;
 
     public GameState(){
         super();
+        targetScore = 0;
         wordGrid = new WordGrid(4,4);
         layoutGUI();
     }
@@ -81,7 +86,8 @@ public class GameState extends State{
         heading.getStyleClass().add("header-text");
 
         Text timeRemaining = new Text("Time Remaining: 40");
-        Text target = new Text("Target: 75 pts");
+        target = new Text();
+        setTargetScore(targetScore);
         Text totalScore = new Text("Total Score: 9");
         Text selectedLetters = new Text("Bu");
 
@@ -108,8 +114,23 @@ public class GameState extends State{
 
     }
 
+    public void setTargetScore(int score){
+        targetScore = score;
+        target.setText("Target Score: " + score + " pts");
+    }
+
+    public void pauseGame(){
+        paused = true;
+        wordGrid.getNodeGrid().setVisible(false);
+    }
+    public void unPauseGame(){
+        paused = false;
+        wordGrid.getNodeGrid().setVisible(true);
+    }
     public Button getHomeButton(){ return homeButton; }
     public Button getExitButton(){ return exitButton; }
     public void setCurrentLevel(Level lvl){ currentLevel = lvl;   }
     public WordGrid getWordGrid(){return wordGrid;}
+    public ToggleButton getPauseButton(){ return pauseButton; }
+    public  boolean isPaused(){ return paused; }
 }

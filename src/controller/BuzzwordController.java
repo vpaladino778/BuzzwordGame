@@ -2,10 +2,10 @@ package controller;
 
 import ScreenStates.StateController;
 import apptemplate.AppTemplate;
+import data.GameData;
 import data.Profile;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 /**
  * Created by vpala on 11/7/2016.
@@ -13,12 +13,14 @@ import java.util.ArrayList;
 public class BuzzwordController implements FileController{
 
     private StateController stateController;
-    private ArrayList<Profile> profiles;
+    private AppTemplate appTemplate;
+    private GameData gameData;
     public static boolean IsLoggedIn = false;
     private Profile profile;
 
     public BuzzwordController(AppTemplate appTemplate){
-
+        this.appTemplate = appTemplate;
+        gameData = (GameData) appTemplate.getDataComponent();
         stateController = new StateController();
     }
 
