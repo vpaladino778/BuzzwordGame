@@ -26,7 +26,7 @@ public class WordGrid {
 
     public void clearLetters(ArrayList<LetterNode> letters){
         for(LetterNode l: letters){
-            l.setLetter((char) 45);
+            l.setLetter('-');
         }
     }
 

@@ -151,7 +151,7 @@ public class BuzzGUI extends AppWorkspaceComponent {
         stateController.getGameState().getExitButton().setOnAction(e -> {
                     YesNoCancelDialogSingleton yesNoDialog = YesNoCancelDialogSingleton.getSingleton();
                     yesNoDialog.show("Confirm Exit", "Are you sure you want to quit?");
-                    if (yesNoDialog.getSelection().equals("YES")) {
+                    if (yesNoDialog.getSelection().equals(YesNoCancelDialogSingleton.YES)) {
                         System.exit(0);
                     }
                 }

@@ -47,8 +47,12 @@ public class LevelState extends State{
         wordLevels.add( new Level(4,6));
         wordLevels.add( new Level(5,6));
 
+        Level peopleLvl;
         for(int i = 1; i <= 8; i ++){
-            peopleLevels.add(new Level(i,i));
+            peopleLvl = new Level(i,i);
+            peopleLvl.setGamemode("people");
+            peopleLevels.add(peopleLvl);
+
         }
         for(int i = 1; i <= 6; i ++){
             animalLevels.add(new Level(i,i));
