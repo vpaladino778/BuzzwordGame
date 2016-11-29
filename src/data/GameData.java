@@ -15,16 +15,48 @@ public class GameData implements AppDataComponent{
     private Profile loggedIn;
     private ArrayList<Profile> profiles;
 
+    //Gamemode Levels
+    private ArrayList<Level> wordLevels;
+    private ArrayList<Level> peopleLevels;
+    private ArrayList<Level> animalLevels;
+
     public GameData(AppTemplate appTemplate){
         profiles = new ArrayList<Profile>();
         this.appTemplate = appTemplate;
         ProfileSingleton profileSingleton = ProfileSingleton.getSingleton();
         profileSingleton.setGameData(this);
+        populateLevels();
     }
 
     @Override
     public void reset() {
 
+    }
+
+
+    //Creates Levels
+    private void populateLevels(){
+        wordLevels = new ArrayList<Level>();
+        peopleLevels = new ArrayList<Level>();
+        animalLevels = new ArrayList<Level>();
+
+
+        wordLevels.add( new Level(1,4));
+        wordLevels.add( new Level(2,5));
+        wordLevels.add( new Level(3,6));
+        wordLevels.add( new Level(4,6));
+        wordLevels.add( new Level(5,6));
+
+        Level peopleLvl;
+        for(int i = 1; i <= 8; i ++){
+            peopleLvl = new Level(i,i);
+            peopleLvl.setGamemode("people");
+            peopleLevels.add(peopleLvl);
+
+        }
+        for(int i = 1; i <= 6; i ++){
+            animalLevels.add(new Level(i,i));
+        }
     }
 
     public boolean logIn(String username, String password){
@@ -34,6 +66,7 @@ public class GameData implements AppDataComponent{
             if(p.checkPassword(password)){
                 //Login information is correct
                 loggedIn = p;
+                updateLevels(p);
                 dialogSingleton.show("Login was successfull",username + " has been logged in successfully!");
                 return true;
             }
@@ -49,6 +82,24 @@ public class GameData implements AppDataComponent{
             }
         }
         return null;
+    }
+    //Unlock levels in order to match the profiles data
+    public void updateLevels(Profile p){
+        for(int i = 0; i < p.getWordLevelsCompleted().size(); i++){
+            if(p.getWordLevelsCompleted().get(i).getLevelID() == wordLevels.get(i).getLevelID()){
+                wordLevels.get(i).setUnlocked(true);
+            }
+        }
+        for(int i = 0; i < p.getAnimalLevelsCompleted().size(); i++){
+            if(p.getAnimalLevelsCompleted().get(i).getLevelID() == animalLevels.get(i).getLevelID()){
+                wordLevels.get(i).setUnlocked(true);
+            }
+        }
+        for(int i = 0; i < p.getPeopleLevelsCompleted().size(); i++){
+            if(p.getPeopleLevelsCompleted().get(i).getLevelID() == peopleLevels.get(i).getLevelID()){
+                peopleLevels.get(i).setUnlocked(true);
+            }
+        }
     }
     //Returns false if a profile with that username already exists
     public boolean createProfile(String username, String password){
@@ -66,4 +117,16 @@ public class GameData implements AppDataComponent{
     }
 
     public Profile getLoggedIn(){ return loggedIn; }
+
+    public ArrayList<Level> getWordLevels() {
+        return wordLevels;
+    }
+
+    public ArrayList<Level> getPeopleLevels() {
+        return peopleLevels;
+    }
+
+    public ArrayList<Level> getAnimalLevels() {
+        return animalLevels;
+    }
 }

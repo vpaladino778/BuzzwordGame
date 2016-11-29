@@ -71,7 +71,7 @@ public class BuzzGUI extends AppWorkspaceComponent {
                 }
         );
         //Level button Handlers
-        ArrayList<Level> wordLevels = stateController.getLevelState().getWordLevels();
+        ArrayList<Level> wordLevels = gameData.getWordLevels();
         for (Level level : wordLevels) {
             level.getLevelButton().setOnAction(e -> {
                 stateController.getGameState().setCurrentLevel(level);

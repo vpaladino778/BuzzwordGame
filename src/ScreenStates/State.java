@@ -1,5 +1,7 @@
 package ScreenStates;
 
+import apptemplate.AppTemplate;
+import data.GameData;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import propertymanager.PropertyManager;
@@ -14,9 +16,13 @@ public abstract class State {
     protected Scene stateScene;
     protected Pane statePane;
     protected final PropertyManager propertyManager;
+    protected AppTemplate appTemplate;
+    protected GameData gameData;
 
-    public State(){
+    public State(AppTemplate appTemplate){
+        this.appTemplate = appTemplate;
         propertyManager = PropertyManager.getManager();
+        gameData = (GameData) appTemplate.getDataComponent();
     }
 
     public abstract void layoutGUI();

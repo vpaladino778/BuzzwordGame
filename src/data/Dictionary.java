@@ -60,13 +60,12 @@ public class Dictionary {
     }
     //Gets random word within an arraylist
     public static String getRandomWord(ArrayList<String> set){
-        int rand = new Random().nextInt(set.size());
+        int rand = new Random().nextInt(set.size() - 1);
         return set.get(rand);
     }
 
     //Returns a random word within the specified listNum, the higher the number, the harder the word
     public String getRandomWord(ArrayList<String> set, int minLength, int maxLength){
-
         if(minLength > maxLength){
             throw new InvalidParameterException();
         }
@@ -75,10 +74,10 @@ public class Dictionary {
         while(randWord.length() < minLength || randWord.length() > maxLength){
             randWord = getRandomWord(set);
         }
-
         return randWord;
-
     }
+
+    public HashSet<String> getAllWords(){ return allWords; }
 
     public ArrayList<String> getWordList(){
         return wordList;
