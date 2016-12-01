@@ -5,6 +5,10 @@ import apptemplate.AppTemplate;
 import components.AppDataComponent;
 import ui.AppMessageDialogSingleton;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 
 /**
@@ -15,6 +19,8 @@ public class GameData implements AppDataComponent{
     private Profile loggedIn;
     private ArrayList<Profile> profiles;
 
+    private GameDataFile gameDataFile;
+
     //Gamemode Levels
     private ArrayList<Level> wordLevels;
     private ArrayList<Level> peopleLevels;
@@ -23,9 +29,12 @@ public class GameData implements AppDataComponent{
     public GameData(AppTemplate appTemplate){
         profiles = new ArrayList<Profile>();
         this.appTemplate = appTemplate;
+        gameDataFile = (GameDataFile) appTemplate.getFileComponent();
         ProfileSingleton profileSingleton = ProfileSingleton.getSingleton();
         profileSingleton.setGameData(this);
         populateLevels();
+        loadProfiles();
+        System.out.println();
     }
 
     @Override
@@ -107,6 +116,11 @@ public class GameData implements AppDataComponent{
         if(checkUsername(username) == null){
             Profile newProfile = new Profile(username,password);
             profiles.add(newProfile);
+            try {
+                gameDataFile.saveData(newProfile, Paths.get("resources/saved/" + newProfile.getUsername() + ".json"));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             dialogSingleton.show("Profile Created", "Your profile has been successfully created!");
             return true;
         }else{
@@ -116,6 +130,30 @@ public class GameData implements AppDataComponent{
         }
     }
 
+    public void loadProfiles(){ //Loads profiles from saved folder
+        Profile toAdd = new Profile();
+        File savedFolder = new File("resources/saved");
+        File[] profileList = savedFolder.listFiles();
+
+        for(File prof : profileList){
+            if(prof.isFile()){
+                try {
+                    gameDataFile.loadData(toAdd,prof.toPath());
+                    profiles.add(toAdd);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    public void updateLoggedIn(){
+        try {
+            gameDataFile.saveData(loggedIn, Paths.get("resources/saved/" + loggedIn.getUsername() + ".json"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
     public Profile getLoggedIn(){ return loggedIn; }
 
     public ArrayList<Level> getWordLevels() {
