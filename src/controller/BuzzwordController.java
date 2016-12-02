@@ -21,7 +21,7 @@ public class BuzzwordController implements FileController{
     public BuzzwordController(AppTemplate appTemplate){
         this.appTemplate = appTemplate;
         gameData = (GameData) appTemplate.getDataComponent();
-        stateController = new StateController(appTemplate);
+        stateController = new StateController();
     }
 
     public StateController getStateController(){ return stateController; }

@@ -1,7 +1,6 @@
 package ScreenStates;
 
 import Display.WordGrid;
-import apptemplate.AppTemplate;
 import data.Level;
 import data.Word;
 import javafx.beans.binding.Bindings;
@@ -37,8 +36,8 @@ public class GameState extends State{
 
     private WordGrid wordGrid;
 
-    public GameState(AppTemplate appTemplate){
-        super(appTemplate);
+    public GameState(){
+        super();
         targetScore = 0;
         wordGrid = new WordGrid(4,4);
         layoutGUI();
@@ -61,6 +60,7 @@ public class GameState extends State{
 
         homeButton = new Button();
         homeButton.setText("Home");
+
 
         Image playImage = new Image("images/play.png");
         Image pauseImage = new Image("images/pause.png");

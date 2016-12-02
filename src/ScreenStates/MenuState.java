@@ -1,6 +1,5 @@
 package ScreenStates;
 
-import apptemplate.AppTemplate;
 import javafx.collections.FXCollections;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -29,8 +28,8 @@ public class MenuState extends State {
     private ChoiceBox gameModeBox;
 
 
-    public MenuState(AppTemplate appTemplate){
-        super(appTemplate);
+    public MenuState(){
+        super();
         layoutGUI();
     }
 

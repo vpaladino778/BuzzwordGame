@@ -5,14 +5,15 @@ import Display.WordGrid;
 import javafx.scene.control.Button;
 
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
 
 /**
  * Created by vpala on 11/14/2016.
  */
 public class Level {
 
-    //Words used for grid generation
+    //Word Set
+
+
     private Dictionary currentDictionary;
     private int levelID;
     private String gamemode;
@@ -21,9 +22,6 @@ public class Level {
     private boolean isCompleted;
     private int maxWordLength;
     private int levelDifficulty; //The higher this is, the more large words will be placed into the grid Default: 1
-
-    //Guessed words that were correct
-    private ArrayList<String> correctWords;
 
     private int targetScore;
 
@@ -50,6 +48,7 @@ public class Level {
         isUnlocked = b;
         updateDisabled();
     }
+
     public boolean updateDisabled() {
         if (isUnlocked) {
             levelButton.setDisable(false);
@@ -58,6 +57,7 @@ public class Level {
         }
         return isUnlocked;
     }
+
     //Generates level as close to the target score
     public int generateLevel(WordGrid grid) {
         grid.clearLetters(grid.getActualNodes());
@@ -67,7 +67,6 @@ public class Level {
         try {
             if (gamemode.equalsIgnoreCase("words")) {
                 currentDictionary.loadDictionary("dictionary/commonWords.txt");
-                currentDictionary.loadHashSet("dictionary/words.txt");
             } else if (gamemode.equalsIgnoreCase("animals")) {
                 currentDictionary.loadDictionary("dictionary/commonAnimals.txt");
             } else if (gamemode.equalsIgnoreCase("people")) {
@@ -108,18 +107,6 @@ public class Level {
             score += i;
         }
         return score;
-    }
-
-
-    //Checks the word to see if it is a valid word, then checks if it has already been guessed
-    public boolean checkWord(String word){
-        if(currentDictionary.getAllWords().contains(word)) { //if word is contained in the total list of words
-            if (!correctWords.contains(word)) {//If the word has not already been guessed
-                correctWords.add(word);
-                return true;
-            }
-        }
-        return false;
     }
 
 

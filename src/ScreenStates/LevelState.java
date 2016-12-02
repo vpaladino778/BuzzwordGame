@@ -1,6 +1,5 @@
 package ScreenStates;
 
-import apptemplate.AppTemplate;
 import data.Level;
 import javafx.scene.control.Button;
 import javafx.scene.layout.*;
@@ -23,13 +22,42 @@ public class LevelState extends State{
     private FlowPane flowPane;
     private Button profileButton;
 
-    public LevelState(AppTemplate appTemplate){
-        super(appTemplate);
+    //Gamemode Levels
+    private ArrayList<Level> wordLevels;
+    private ArrayList<Level> peopleLevels;
+    private ArrayList<Level> animalLevels;
+
+    public LevelState(){
+        super();
         gamemode = "Words";
+        populateLevels();
         layoutGUI();
 
     }
 
+    private void populateLevels(){
+        wordLevels = new ArrayList<Level>();
+        peopleLevels = new ArrayList<Level>();
+        animalLevels = new ArrayList<Level>();
+
+
+        wordLevels.add( new Level(1,4));
+        wordLevels.add( new Level(2,5));
+        wordLevels.add( new Level(3,6));
+        wordLevels.add( new Level(4,6));
+        wordLevels.add( new Level(5,6));
+
+        Level peopleLvl;
+        for(int i = 1; i <= 8; i ++){
+            peopleLvl = new Level(i,i);
+            peopleLvl.setGamemode("people");
+            peopleLevels.add(peopleLvl);
+
+        }
+        for(int i = 1; i <= 6; i ++){
+            animalLevels.add(new Level(i,i));
+        }
+    }
     public void displayLevel(ArrayList<Level> levels, FlowPane flow){
         flow.getChildren().setAll(levels.get(0).getLevelButton());
         for(int i = 1;  i < levels.size(); i++){
@@ -41,13 +69,13 @@ public class LevelState extends State{
         gamemode = s;
         if(gamemode.equalsIgnoreCase("people")){
             gamemodeText.setText("People");
-            displayLevel(gameData.getPeopleLevels(),flowPane);
+            displayLevel(peopleLevels,flowPane);
         }else if(gamemode.equalsIgnoreCase("animals")){
             gamemodeText.setText("Animals");
-            displayLevel(gameData.getAnimalLevels(),flowPane);
+            displayLevel(animalLevels,flowPane);
         }else{//Words - Default
             gamemodeText.setText("Words");
-            displayLevel(gameData.getWordLevels(),flowPane);
+            displayLevel(wordLevels,flowPane);
         }
     }
     public String getGamemode(){ return gamemode; }
@@ -90,4 +118,15 @@ public class LevelState extends State{
     }
     public Button getProfileButton(){ return profileButton; }
 
+    public ArrayList<Level> getWordLevels() {
+        return wordLevels;
+    }
+
+    public ArrayList<Level> getPeopleLevels() {
+        return peopleLevels;
+    }
+
+    public ArrayList<Level> getAnimalLevels() {
+        return animalLevels;
+    }
 }
