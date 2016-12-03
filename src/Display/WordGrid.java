@@ -30,6 +30,11 @@ public class WordGrid {
         }
     }
 
+    //Returns a list of words that were found within this WordGrid
+    public ArrayList<String> findSolution(){
+        return null;
+    }
+
     //Return false if it cannot insert the word
     public boolean insertWord(String word){
         int start;

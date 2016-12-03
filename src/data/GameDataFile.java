@@ -78,15 +78,21 @@ public class GameDataFile implements AppFileComponent{
 
         while(!jsonParser.isClosed()){
             JsonToken token = jsonParser.nextToken();
-            if(JsonToken.FIELD_NAME.equals(token)){
+
+            if(token == null)
+                break;
+
+             if(JsonToken.FIELD_NAME.equals(token)){
                 String fieldname = jsonParser.getCurrentName();
 
                 switch(fieldname){
                     case USERNAME:
                         jsonParser.nextToken();
+                        System.out.println("Username: " + jsonParser.getValueAsString());
                         gameData.setUsername(jsonParser.getValueAsString());
                     case PASSWORD:
                         jsonParser.nextToken();
+                        System.out.println("Password: " + jsonParser.getValueAsString());
                         gameData.setPassword(jsonParser.getValueAsString());
                     case WORD_LEVELS:
                         jsonParser.nextToken();
