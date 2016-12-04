@@ -36,6 +36,9 @@ public class LetterNode {
         button.getStyleClass().setAll("letternode");
         buttonPane.getChildren().setAll(button);
         buttonPane.setPadding(new Insets(10));
+        button.setOnDragOver(e ->{
+            System.out.println("Mouse graddes over node " + letter);
+        });
     }
 
     //Generates a random letter from A-Z

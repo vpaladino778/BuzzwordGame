@@ -1,10 +1,7 @@
 package data;
 
-import BuzzwordGame.Buzzword;
-
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.net.URL;
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -26,13 +23,17 @@ public class Dictionary {
         allWords = new HashSet<>();
     }
 
+    public boolean isWord(String word){
+        if(!allWords.isEmpty()){ //allWords has been loaded
+            return allWords.contains(word.trim().toLowerCase());
+        }else{
+            return wordList.contains(word.trim().toLowerCase());
+        }
+    }
     //Loads dictionary at location returns false if the file is not found
     public void loadDictionary(String dictionary) throws FileNotFoundException {
         Scanner dict = null;
-        URL dicURL  = Buzzword.class.getClassLoader().getResource(dictionary);
-        if (dicURL == null)
-            throw new FileNotFoundException("Work folder not found under resources.");
-        File dictFile = new File(dicURL.getFile());
+        File dictFile = new File(dictionary);
         dict = new Scanner(dictFile);
         while(dict.hasNext()){
             String next = dict.next();
@@ -45,10 +46,7 @@ public class Dictionary {
     //Loads dictionary at location returns false if the file is not found
     public void loadHashSet(String dictionary) throws FileNotFoundException {
         Scanner dict = null;
-        URL dicURL  = Buzzword.class.getClassLoader().getResource(dictionary);
-        if (dicURL == null)
-            throw new FileNotFoundException("Work folder not found under resources.");
-        File dictFile = new File(dicURL.getFile());
+        File dictFile = new File(dictionary);
         dict = new Scanner(dictFile);
         while(dict.hasNext()){
             String next = dict.next();

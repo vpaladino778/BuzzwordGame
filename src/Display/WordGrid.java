@@ -1,9 +1,9 @@
 package Display;
 
+import data.Level;
 import javafx.scene.layout.GridPane;
 
 import java.util.ArrayList;
-import java.util.function.IntBinaryOperator;
 
 /**
  * Created by vpala on 11/11/2016.
@@ -23,6 +23,7 @@ public class WordGrid {
 
         populateGrid(actualNodes);
         clearLetters(actualNodes);
+
     }
 
     public void clearLetters(ArrayList<LetterNode> letters) {
@@ -36,58 +37,49 @@ public class WordGrid {
         return null;
     }
 
-    public boolean checkWordInGrid(String word) {
-    return false;
-    }
+    //Prints all words present in the grid
+    public void checkWord(ArrayList<Boolean> visited,int i, String word) {
 
-    //Checks word at specified point
-    public boolean checkWord(int index, String word) {
-        ArrayList<Integer> cPaths = correctPaths(index,word.charAt(1));
-        if(cPaths == null){
-            return false;
+        visited.set(i,true);
+        word = word + actualNodes.get(i).getLetter();
+
+        if(Level.currentDictionary.isWord(word)){
+            System.out.println(word);
         }
-        if(word.length() == 0){
-            return true;
-        }
-        for(Integer i: cPaths){
-            return checkWord(i,word.substring(1,word.length()));
-        }
-        return false;
-    }
-
-
-    //Returns a list of the surrounding nodes that contain a certain letter. Returns null if the list is empty
-    public ArrayList<Integer> correctPaths(int index, char letter) {
-        ArrayList<LetterNode> nearby = nearbyNodes(gridHeight, gridWidth, actualNodes, index);
-        ArrayList<Integer> correctPath = new ArrayList<>();
-        boolean isEmpty = true;
-        for (int j = 0; j < nearby.size(); j++) {
-            if (nearby.get(j).getLetter() == letter) {
-                if (nearby.get(j) != null) {
-                    isEmpty = false;
-                    switch (j) {
-                        case '0':
-                            correctPath.add(getRight(index));
-                            break;
-                        case '1':
-                            correctPath.add(getLeft(index));
-                            break;
-                        case '2':
-                            correctPath.add(getAbove(index));
-                            break;
-                        case '3':
-                            correctPath.add(getBelow(index));
-                            break;
-                    }
-
-                }
+            int right = getRight(i);
+            int left = getLeft(i);
+            int above = getAbove(i);
+            int below = getBelow(i);
+            if (right != -1 && !visited.get(right)) {
+                checkWord(visited,right,word);
             }
-        }
-        if(!isEmpty){
-            return correctPath;
-        }
-        return null;
+            if (left != -1 && !visited.get(left)) {
+                checkWord(visited,left,word);
+            }
+            if (above != -1 && !visited.get(above)) {
+                checkWord(visited,above,word);
+            }
+            if (below != -1 && !visited.get(below)) {
+                checkWord(visited,below,word);
+            }
+
+        word = word.substring(0,word.length() - 1);
+        visited.set(i,false);
     }
+
+    public void findWords(){
+        ArrayList<Boolean> visted = new ArrayList<>();
+        for(int i = 0; i < actualNodes.size(); i++){
+            visted.add(false);
+        }
+        String word = "";
+        System.out.println("Words within the grid:");
+        for(int j = 0; j < actualNodes.size(); j++){
+            checkWord(visted,j,word);
+        }
+    }
+
+
 
     //Return false if it cannot insert the word
     public boolean insertWord(String word){
@@ -140,6 +132,7 @@ public class WordGrid {
         for(int i = 0; i < newList.size(); i++){
             actualNodes.get(i).setLetter(newList.get(i).getLetter());
         }
+        System.out.println("Inserted Word: " + word);
         return true;
     }
 

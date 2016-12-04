@@ -47,16 +47,16 @@ public class LevelState extends State{
         wordLevels.add( new Level(4,6));
         wordLevels.add( new Level(5,6));
 
-        Level peopleLvl;
-        for(int i = 1; i <= 8; i ++){
-            peopleLvl = new Level(i,i);
-            peopleLvl.setGamemode("people");
-            peopleLevels.add(peopleLvl);
+        peopleLevels.add( new Level(1,4));
+        peopleLevels.add( new Level(2,5));
+        peopleLevels.add( new Level(3,6));
+        peopleLevels.add( new Level(4,6));
 
-        }
-        for(int i = 1; i <= 6; i ++){
-            animalLevels.add(new Level(i,i));
-        }
+        animalLevels.add( new Level(1,4));
+        animalLevels.add( new Level(2,5));
+        animalLevels.add( new Level(3,6));
+        animalLevels.add( new Level(4,6));
+        animalLevels.add( new Level(5,6));
     }
     public void displayLevel(ArrayList<Level> levels, FlowPane flow){
         flow.getChildren().setAll(levels.get(0).getLevelButton());

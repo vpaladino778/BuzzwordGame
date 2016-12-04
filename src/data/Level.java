@@ -2,6 +2,7 @@ package data;
 
 import Display.LetterNode;
 import Display.WordGrid;
+import ScreenStates.LevelState;
 import javafx.scene.control.Button;
 
 import java.io.FileNotFoundException;
@@ -12,7 +13,7 @@ import java.io.FileNotFoundException;
 public class Level {
 
     //Word Set
-    private Dictionary currentDictionary;
+    public static Dictionary currentDictionary;
     private int levelID;
     private String gamemode;
     private Button levelButton;
@@ -29,10 +30,11 @@ public class Level {
         this.maxWordLength = maxWordLength;
         if (maxWordLength < 3)
             maxWordLength = 3;
-        gamemode = "words";
+        gamemode = LevelState.gamemode;
         levelID = id;
         isCompleted = false;
         levelButton = new Button(Integer.toString(id));
+
         levelButton.getStyleClass().add("letternode");
         isUnlocked = false;
         levelButton.setDisable(true);
@@ -64,11 +66,12 @@ public class Level {
         int maxLength = maxWordLength;
         try {
             if (gamemode.equalsIgnoreCase("words")) {
-                currentDictionary.loadDictionary("dictionary/commonWords.txt");
+                currentDictionary.loadDictionary("resources/dictionary/commonWords.txt");
+                currentDictionary.loadHashSet("resources/dictionary/words.txt");
             } else if (gamemode.equalsIgnoreCase("animals")) {
-                currentDictionary.loadDictionary("dictionary/commonAnimals.txt");
+                currentDictionary.loadDictionary("resources/dictionary/commonAnimals.txt");
             } else if (gamemode.equalsIgnoreCase("people")) {
-                currentDictionary.loadDictionary("dictionary/commonNames.txt");
+                currentDictionary.loadDictionary("resources/dictionary/commonNames.txt");
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -77,7 +80,6 @@ public class Level {
             String randWord = currentDictionary.getRandomWord(currentDictionary.getWordList(), minLength, maxLength);
             if (grid.insertWord(randWord)) {
                 actualScore += Level.calcWordScore(randWord);
-                System.out.println("Inserting word:" + randWord);
                 levelDifficulty--;
                 if (minLength > 3 && maxLength > 3) {
                     minLength--;
@@ -88,6 +90,7 @@ public class Level {
 
         fillEmptySpace(grid);
         targetScore = actualScore;
+        grid.findWords();
         return actualScore;
     }
 
