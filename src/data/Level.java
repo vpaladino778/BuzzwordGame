@@ -12,8 +12,6 @@ import java.io.FileNotFoundException;
 public class Level {
 
     //Word Set
-
-
     private Dictionary currentDictionary;
     private int levelID;
     private String gamemode;

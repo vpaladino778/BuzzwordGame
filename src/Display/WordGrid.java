@@ -3,6 +3,7 @@ package Display;
 import javafx.scene.layout.GridPane;
 
 import java.util.ArrayList;
+import java.util.function.IntBinaryOperator;
 
 /**
  * Created by vpala on 11/11/2016.
@@ -14,7 +15,7 @@ public class WordGrid {
 
     private ArrayList<LetterNode> actualNodes;
 
-    public WordGrid(int w, int h){
+    public WordGrid(int w, int h) {
         gridHeight = h;
         gridWidth = w;
         nodeGrid = new GridPane();
@@ -24,14 +25,67 @@ public class WordGrid {
         clearLetters(actualNodes);
     }
 
-    public void clearLetters(ArrayList<LetterNode> letters){
-        for(LetterNode l: letters){
+    public void clearLetters(ArrayList<LetterNode> letters) {
+        for (LetterNode l : letters) {
             l.setLetter('-');
         }
     }
 
     //Returns a list of words that were found within this WordGrid
-    public ArrayList<String> findSolution(){
+    public ArrayList<String> findSolution() {
+        return null;
+    }
+
+    public boolean checkWordInGrid(String word) {
+    return false;
+    }
+
+    //Checks word at specified point
+    public boolean checkWord(int index, String word) {
+        ArrayList<Integer> cPaths = correctPaths(index,word.charAt(1));
+        if(cPaths == null){
+            return false;
+        }
+        if(word.length() == 0){
+            return true;
+        }
+        for(Integer i: cPaths){
+            return checkWord(i,word.substring(1,word.length()));
+        }
+        return false;
+    }
+
+
+    //Returns a list of the surrounding nodes that contain a certain letter. Returns null if the list is empty
+    public ArrayList<Integer> correctPaths(int index, char letter) {
+        ArrayList<LetterNode> nearby = nearbyNodes(gridHeight, gridWidth, actualNodes, index);
+        ArrayList<Integer> correctPath = new ArrayList<>();
+        boolean isEmpty = true;
+        for (int j = 0; j < nearby.size(); j++) {
+            if (nearby.get(j).getLetter() == letter) {
+                if (nearby.get(j) != null) {
+                    isEmpty = false;
+                    switch (j) {
+                        case '0':
+                            correctPath.add(getRight(index));
+                            break;
+                        case '1':
+                            correctPath.add(getLeft(index));
+                            break;
+                        case '2':
+                            correctPath.add(getAbove(index));
+                            break;
+                        case '3':
+                            correctPath.add(getBelow(index));
+                            break;
+                    }
+
+                }
+            }
+        }
+        if(!isEmpty){
+            return correctPath;
+        }
         return null;
     }
 

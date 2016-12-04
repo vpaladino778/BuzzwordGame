@@ -17,7 +17,7 @@ public class LevelState extends State{
     private VBox toolbar;
     private BorderPane borderPane;
     private Button exitButton;
-    private String gamemode;
+    public static String gamemode;
     private Text gamemodeText;
     private FlowPane flowPane;
     private Button profileButton;
