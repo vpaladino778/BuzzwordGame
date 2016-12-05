@@ -71,8 +71,8 @@ public class GameDataFile implements AppFileComponent{
     }
 
     @Override
-    public void loadData(AppDataComponent data, Path filePath) throws IOException {
-        Profile gameData = (Profile) data;
+    public Profile loadData(Path filePath) throws IOException {
+        Profile gameData = new Profile();
         JsonFactory jsonFactory = new JsonFactory();
         JsonParser jsonParser = jsonFactory.createParser(Files.newInputStream(filePath));
 
@@ -90,10 +90,12 @@ public class GameDataFile implements AppFileComponent{
                         jsonParser.nextToken();
                         System.out.println("Username: " + jsonParser.getValueAsString());
                         gameData.setUsername(jsonParser.getValueAsString());
+                        break;
                     case PASSWORD:
                         jsonParser.nextToken();
                         System.out.println("Password: " + jsonParser.getValueAsString());
                         gameData.setPassword(jsonParser.getValueAsString());
+                        break;
                     case WORD_LEVELS:
                         jsonParser.nextToken();
                         while(jsonParser.nextToken() != JsonToken.END_ARRAY)
@@ -114,6 +116,7 @@ public class GameDataFile implements AppFileComponent{
                 }
             }
         }
+        return gameData;
     }
 
     @Override

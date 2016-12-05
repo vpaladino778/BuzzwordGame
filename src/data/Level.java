@@ -66,7 +66,7 @@ public class Level {
         int maxLength = maxWordLength;
         try {
             if (gamemode.equalsIgnoreCase("words")) {
-                currentDictionary.loadDictionary("resources/dictionary/commonWords.txt");
+                currentDictionary.loadDictionary("resources/dictionary/words.txt");
                 currentDictionary.loadHashSet("resources/dictionary/words.txt");
             } else if (gamemode.equalsIgnoreCase("animals")) {
                 currentDictionary.loadDictionary("resources/dictionary/commonAnimals.txt");

@@ -137,8 +137,7 @@ public class GameData implements AppDataComponent{
         for(File prof : profileList){
             if(prof.isFile()){
                 try {
-                    toAdd = new Profile();
-                    gameDataFile.loadData(toAdd,prof.toPath());
+                    toAdd = gameDataFile.loadData(prof.toPath());
                     profiles.add(toAdd);
                 } catch (IOException e) {
                     e.printStackTrace();
