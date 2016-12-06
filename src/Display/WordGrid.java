@@ -1,8 +1,12 @@
 package Display;
 
 import data.Level;
+import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.TransferMode;
 import javafx.scene.layout.GridPane;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 /**
@@ -13,6 +17,8 @@ public class WordGrid {
     private int gridHeight;
     private GridPane nodeGrid;
 
+    private ArrayList<LetterNode> selectedNodes;
+
     private ArrayList<LetterNode> actualNodes;
 
     public WordGrid(int w, int h) {
@@ -20,7 +26,7 @@ public class WordGrid {
         gridWidth = w;
         nodeGrid = new GridPane();
         actualNodes = new ArrayList<LetterNode>();
-
+        selectedNodes = new ArrayList<>();
         populateGrid(actualNodes);
         clearLetters(actualNodes);
 
@@ -67,6 +73,42 @@ public class WordGrid {
         visited.set(i,false);
     }
 
+
+    public void setupNodeHandlers(LetterNode node){
+        node.getButton().setOnDragEntered(e ->{
+            System.out.println("Entered");
+            if(isAdjacent(selectedNodes.get(selectedNodes.size() - 1).index,node.index)){
+                selectedNodes.add(node);
+            }
+        });
+        node.getButton().setOnDragDetected(e ->{
+            Dragboard db = node.getButton().startDragAndDrop(TransferMode.ANY);
+            ClipboardContent content = new ClipboardContent();
+            content.putString("Hello!");
+            db.setContent(content);
+            System.out.println("Drag detected " + node.index);
+            resetNodeStyle(selectedNodes);
+            selectedNodes.clear();
+            selectedNodes.add(node);
+            e.consume();
+        });
+        node.getButton().setOnDragDone(e -> {
+            System.out.println(getSelectedWord());
+
+            highlightSelected(selectedNodes);
+        });
+    }
+
+    public void highlightSelected(ArrayList<LetterNode> nodes){
+        for(LetterNode n: nodes){
+            n.getButton().getStyleClass().setAll("selectedLetternode");
+        }
+    }
+    public void resetNodeStyle(ArrayList<LetterNode> nodes){
+        for(LetterNode n: nodes){
+            n.getButton().getStyleClass().setAll("letternode");
+        }
+    }
     public void findWords(){
         ArrayList<Boolean> visted = new ArrayList<>();
         for(int i = 0; i < actualNodes.size(); i++){
@@ -183,13 +225,30 @@ public class WordGrid {
         return nearby;
     }
 
+    public String getSelectedWord(){
+        StringBuilder string = new StringBuilder();
+        for (LetterNode node: selectedNodes) {
+            string.append(node.getLetter());
+        }
+        return string.toString();
+    }
 
+    //Returns true if ajd is next to index on the grid
+    public boolean isAdjacent(int index, int ajd){
+        if(getRight(index) == ajd || getLeft(index) == ajd ||getAbove(index) == ajd || getBelow(index)== ajd){
+            return true;
+        }
+        return false;
+    }
     public void populateGrid(ArrayList<LetterNode> nL){
+
         int node = 0;
         for(int i = 0; i < gridWidth; i++){
             for( int j = 0 ; j < gridHeight; j++){
                 LetterNode letterNode = new LetterNode('-');
                 actualNodes.add(letterNode);
+                letterNode.index = actualNodes.size() - 1;
+                setupNodeHandlers(letterNode);
                 nodeGrid.add(letterNode.getButtonPane(),j,i);
                 node++;
             }
@@ -226,6 +285,8 @@ public class WordGrid {
             return -1;
         }
     }
+
+
     public int getGridWidth() {
         return gridWidth;
     }

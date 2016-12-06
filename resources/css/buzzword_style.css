@@ -17,6 +17,22 @@
     -fx-min-width: 120px;
 }
 
+.selectedLetternode{
+    -fx-background-radius: 5em;
+    -fx-min-width: 60px;
+    -fx-min-height: 60px;
+    -fx-max-height: 60px;
+    -fx-max-width: 60px;
+    -fx-text-fill: whitesmoke;
+    -fx-font-size: 35px;
+    -fx-background-color:
+            #000000,
+            linear-gradient(#48e038, #28911d),
+            linear-gradient(#43ff14, #23841a),
+            linear-gradient(#0a4f03, #223768);
+    -fx-effect: dropshadow( one-pass-box , rgba(0,0,0,0.8) , 0, 0,0,1);
+}
+
 .letternode{
     -fx-background-radius: 5em;
     -fx-min-width: 60px;
