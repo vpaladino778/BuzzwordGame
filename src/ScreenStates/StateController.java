@@ -1,5 +1,7 @@
 package ScreenStates;
 
+import apptemplate.AppTemplate;
+
 /**
  * Created by vpala on 11/7/2016.
  */
@@ -10,10 +12,10 @@ public class StateController {
     private LevelState levelState;
     private GameState gameState;
 
-    public StateController(){
+    public StateController(AppTemplate appTemplate){
         menuState = new MenuState();
         levelState = new LevelState();
-        gameState = new GameState();
+        gameState = new GameState(appTemplate);
         setCurrentState(menuState);
     }
     public State getCurrentState(){

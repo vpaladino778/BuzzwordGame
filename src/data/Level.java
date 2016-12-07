@@ -3,6 +3,7 @@ package data;
 import Display.LetterNode;
 import Display.WordGrid;
 import ScreenStates.LevelState;
+import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 
 import java.io.FileNotFoundException;
@@ -33,7 +34,9 @@ public class Level {
         gamemode = LevelState.gamemode;
         levelID = id;
         isCompleted = false;
-        levelButton = new Button(Integer.toString(id));
+        levelButton = new Button();
+        levelButton.setText(id + "");
+        levelButton.setPadding(new Insets(10));
 
         levelButton.getStyleClass().add("letternode");
         isUnlocked = false;

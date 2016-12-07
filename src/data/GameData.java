@@ -18,6 +18,10 @@ public class GameData implements AppDataComponent{
     private Profile loggedIn;
     private ArrayList<Profile> profiles;
 
+    private ArrayList<String> guessedWords;
+
+    private int currentScore;
+
     private GameDataFile gameDataFile;
 
     //Gamemode Levels
@@ -26,6 +30,8 @@ public class GameData implements AppDataComponent{
     private ArrayList<Level> animalLevels;
 
     public GameData(AppTemplate appTemplate){
+        currentScore = 0;
+        guessedWords = new ArrayList<>();
         profiles = new ArrayList<Profile>();
         this.appTemplate = appTemplate;
         gameDataFile = (GameDataFile) appTemplate.getFileComponent();
@@ -40,7 +46,6 @@ public class GameData implements AppDataComponent{
     public void reset() {
 
     }
-
 
     //Creates Levels
     private void populateLevels(){
@@ -153,6 +158,17 @@ public class GameData implements AppDataComponent{
             e.printStackTrace();
         }
     }
+
+    public ArrayList<String> getGuessedWords(){ return guessedWords; }
+
+    public int getCurrentScore() {
+        return currentScore;
+    }
+
+    public void setCurrentScore(int currentScore) {
+        this.currentScore = currentScore;
+    }
+
     public Profile getLoggedIn(){ return loggedIn; }
 
     public ArrayList<Level> getWordLevels() {

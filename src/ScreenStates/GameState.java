@@ -1,6 +1,7 @@
 package ScreenStates;
 
 import Display.WordGrid;
+import apptemplate.AppTemplate;
 import data.Level;
 import data.Word;
 import javafx.beans.binding.Bindings;
@@ -30,16 +31,19 @@ public class GameState extends State{
     private Level currentLevel;
     private ToggleButton pauseButton;
     private int targetScore;
+    private int currentScore;
     private Text target;
+    private Text totalScore;
 
     private boolean paused;
 
     private WordGrid wordGrid;
 
-    public GameState(){
+    public GameState(AppTemplate appTemplate){
         super();
+        currentScore = 0;
         targetScore = 0;
-        wordGrid = new WordGrid(4,4);
+        wordGrid = new WordGrid(4,4, appTemplate);
         layoutGUI();
     }
 
@@ -88,7 +92,8 @@ public class GameState extends State{
         Text timeRemaining = new Text("Time Remaining: 40");
         target = new Text();
         setTargetScore(targetScore);
-        Text totalScore = new Text("Total Score: 9");
+        totalScore = new Text();
+        setCurrentScore(currentScore);
         Text selectedLetters = new Text("Bu");
 
 
@@ -111,6 +116,12 @@ public class GameState extends State{
         statePane.getChildren().setAll(outerBox);
 
         stateScene = createScene(statePane);
+
+    }
+
+    public void setCurrentScore(int score){
+        currentScore = score;
+        totalScore.setText("Total Score: " + score + " pts");
 
     }
 

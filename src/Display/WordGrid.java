@@ -1,10 +1,14 @@
 package Display;
 
+import apptemplate.AppTemplate;
+import controller.BuzzwordController;
+import data.GameData;
 import data.Level;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.GridPane;
+import ui.AppGUI;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -17,19 +21,26 @@ public class WordGrid {
     private int gridHeight;
     private GridPane nodeGrid;
 
+    private AppTemplate appTemplate;
+    private GameData gameData;
+    private AppGUI gui;
+    private BuzzwordController controller;
+
     private ArrayList<LetterNode> selectedNodes;
 
     private ArrayList<LetterNode> actualNodes;
 
-    public WordGrid(int w, int h) {
+    public WordGrid(int w, int h, AppTemplate appTemplate) {
         gridHeight = h;
         gridWidth = w;
+        this.appTemplate = appTemplate;
         nodeGrid = new GridPane();
         actualNodes = new ArrayList<LetterNode>();
         selectedNodes = new ArrayList<>();
         populateGrid(actualNodes);
         clearLetters(actualNodes);
-
+        gameData = (GameData) appTemplate.getDataComponent();
+        gui = appTemplate.getGUI();
     }
 
     public void clearLetters(ArrayList<LetterNode> letters) {
@@ -38,10 +49,6 @@ public class WordGrid {
         }
     }
 
-    //Returns a list of words that were found within this WordGrid
-    public ArrayList<String> findSolution() {
-        return null;
-    }
 
     //Prints all words present in the grid
     public void checkWord(ArrayList<Boolean> visited,int i, String word) {
@@ -79,6 +86,7 @@ public class WordGrid {
             System.out.println("Entered");
             if(isAdjacent(selectedNodes.get(selectedNodes.size() - 1).index,node.index)){
                 selectedNodes.add(node);
+                highlightSelected(selectedNodes);
             }
         });
         node.getButton().setOnDragDetected(e ->{
@@ -94,8 +102,13 @@ public class WordGrid {
         });
         node.getButton().setOnDragDone(e -> {
             System.out.println(getSelectedWord());
-
             highlightSelected(selectedNodes);
+            //Selected word is a word and hasn't been guessed
+            if(Level.currentDictionary.isWord(getSelectedWord()) && !gameData.getGuessedWords().contains(getSelectedWord())){
+                gameData.setCurrentScore(gameData.getCurrentScore() + Level.calcWordScore(getSelectedWord()));
+                gameData.getGuessedWords().add(getSelectedWord());
+                BuzzGUI.stateController.getGameState().setCurrentScore(gameData.getCurrentScore());
+            }
         });
     }
 

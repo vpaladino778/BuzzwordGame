@@ -24,7 +24,9 @@ public class BuzzGUI extends AppWorkspaceComponent {
     private AppGUI gui;
     private GameData gameData;
     private BuzzwordController controller;
-    private StateController stateController;
+    public static StateController stateController;
+
+
 
 
     //GUI components
