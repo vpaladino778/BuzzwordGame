@@ -18,6 +18,8 @@ import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import propertymanager.PropertyManager;
 
+import java.util.ArrayList;
+
 /**
  * Created by vpala on 11/9/2016.
  */
@@ -34,7 +36,7 @@ public class GameState extends State{
     private int currentScore;
     private Text target;
     private Text totalScore;
-
+    private ObservableList<Word> correctGuesses;
     private boolean paused;
 
     private WordGrid wordGrid;
@@ -80,8 +82,8 @@ public class GameState extends State{
         wordCol.setCellValueFactory(new PropertyValueFactory<>("word"));
         TableColumn<Word, String> scoreCol = new TableColumn<Word, String>("Score");
         scoreCol.setCellValueFactory(new PropertyValueFactory<>("score"));
-        ObservableList<Word> list = FXCollections.observableArrayList(new Word("Define",4),new Word("Table",5));
-        table.setItems(list);
+        correctGuesses = FXCollections.observableArrayList();
+        table.setItems(correctGuesses);
 
         table.getColumns().addAll(wordCol,scoreCol);
 
@@ -137,6 +139,17 @@ public class GameState extends State{
     public void unPauseGame(){
         paused = false;
         wordGrid.getNodeGrid().setVisible(true);
+    }
+
+    public void updateCorrect(ArrayList<String> guesses){
+        correctGuesses.clear();
+        for( String g: guesses){
+            correctGuesses.add(new Word(g,Level.calcWordScore(g)));
+        }
+    }
+
+    public ObservableList<Word> getGuesses(){
+        return correctGuesses;
     }
     public Button getHomeButton(){ return homeButton; }
     public Button getExitButton(){ return exitButton; }

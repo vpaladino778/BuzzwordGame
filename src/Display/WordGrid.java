@@ -105,8 +105,10 @@ public class WordGrid {
             highlightSelected(selectedNodes);
             //Selected word is a word and hasn't been guessed
             if(Level.currentDictionary.isWord(getSelectedWord()) && !gameData.getGuessedWords().contains(getSelectedWord())){
+                //Correct Guess!
                 gameData.setCurrentScore(gameData.getCurrentScore() + Level.calcWordScore(getSelectedWord()));
                 gameData.getGuessedWords().add(getSelectedWord());
+                BuzzGUI.stateController.getGameState().updateCorrect(gameData.getGuessedWords());
                 BuzzGUI.stateController.getGameState().setCurrentScore(gameData.getCurrentScore());
             }
         });
