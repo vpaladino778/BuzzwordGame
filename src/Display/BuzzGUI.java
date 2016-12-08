@@ -78,6 +78,7 @@ public class BuzzGUI extends AppWorkspaceComponent {
             level.getLevelButton().setOnAction(e -> {
                 stateController.getGameState().setCurrentLevel(level);
                 int targetScore = level.generateLevel(stateController.getGameState().getWordGrid());
+                level.setTargetScore(targetScore);
                 stateController.getGameState().setTargetScore(targetScore);
                 stateController.setCurrentState(stateController.getGameState());
                 layoutGUI();

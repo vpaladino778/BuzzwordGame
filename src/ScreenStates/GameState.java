@@ -38,6 +38,7 @@ public class GameState extends State{
     private Text totalScore;
     private ObservableList<Word> correctGuesses;
     private boolean paused;
+    private Text levelText;
 
     private WordGrid wordGrid;
 
@@ -46,6 +47,8 @@ public class GameState extends State{
         currentScore = 0;
         targetScore = 0;
         wordGrid = new WordGrid(4,4, appTemplate);
+
+        currentLevel = new Level(0,0);
         layoutGUI();
     }
 
@@ -99,7 +102,8 @@ public class GameState extends State{
         Text selectedLetters = new Text("Bu");
 
 
-        Text levelText = new Text("Level 1:");
+        levelText = new Text();
+        setCurrentLevel(currentLevel);
 
         gameInfo.getChildren().addAll(levelText,timeRemaining,selectedLetters,table,totalScore,target);
 
@@ -153,7 +157,11 @@ public class GameState extends State{
     }
     public Button getHomeButton(){ return homeButton; }
     public Button getExitButton(){ return exitButton; }
-    public void setCurrentLevel(Level lvl){ currentLevel = lvl;   }
+    public void setCurrentLevel(Level lvl){
+        currentLevel = lvl;
+        levelText.setText("Level: " + getCurrentLevel().getLevelID());
+    }
+    public Level getCurrentLevel() { return currentLevel; }
     public WordGrid getWordGrid(){return wordGrid;}
     public ToggleButton getPauseButton(){ return pauseButton; }
     public  boolean isPaused(){ return paused; }

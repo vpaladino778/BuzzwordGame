@@ -6,6 +6,7 @@ import components.AppDataComponent;
 import ui.AppMessageDialogSingleton;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -13,6 +14,7 @@ import java.util.ArrayList;
 /**
  * Created by vpala on 11/8/2016.
  */
+
 public class GameData implements AppDataComponent{
     private AppTemplate appTemplate;
     private Profile loggedIn;
@@ -23,6 +25,7 @@ public class GameData implements AppDataComponent{
     private int currentScore;
 
     private GameDataFile gameDataFile;
+
 
     //Gamemode Levels
     private ArrayList<Level> wordLevels;
@@ -39,6 +42,7 @@ public class GameData implements AppDataComponent{
         profileSingleton.setGameData(this);
         populateLevels();
         loadProfiles();
+
         System.out.println();
     }
 
@@ -151,6 +155,15 @@ public class GameData implements AppDataComponent{
         }
     }
 
+    //Checks if any levels are completed, if they are unlocks the next level
+    public void updateCompleted(){
+        for(int i = 0; i < wordLevels.size() - 1; i++){
+            if(wordLevels.get(i).checkCompletion()){
+                wordLevels.get(i +1 ).setUnlocked(true);
+                wordLevels.get(i+1).updateDisabled();
+            }
+        }
+    }
     public void updateLoggedIn(){
         try {
             gameDataFile.saveData(loggedIn, Paths.get("resources/saved/" + loggedIn.getUsername() + ".json"));

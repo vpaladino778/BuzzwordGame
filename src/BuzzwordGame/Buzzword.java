@@ -17,6 +17,8 @@ public class Buzzword extends AppTemplate {
     public static void main(String[] args){
         launch(args); };
 
+
+
     public String getFileControllerClass() {
         return "BuzzwordController";
     }

@@ -3,6 +3,7 @@ package data;
 import Display.LetterNode;
 import Display.WordGrid;
 import ScreenStates.LevelState;
+import controller.BuzzwordController;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 
@@ -26,7 +27,6 @@ public class Level {
     private int targetScore;
 
     public Level(int id, int maxWordLength) {
-        currentDictionary = new Dictionary();
         levelDifficulty = id + maxWordLength;
         this.maxWordLength = maxWordLength;
         if (maxWordLength < 3)
@@ -61,24 +61,25 @@ public class Level {
         return isUnlocked;
     }
 
+    //If the correct dictionary isnt loaded, load it
+    public void checkDictionary(String g) {
+        if (g.equalsIgnoreCase("words") ) {
+            currentDictionary = BuzzwordController.wordsDictionary;
+        } else if (g.equalsIgnoreCase("animals")) {
+            currentDictionary = BuzzwordController.animalDictionary;
+        } else if (g.equalsIgnoreCase("people")) {
+            currentDictionary = BuzzwordController.peopleDictionary;
+        }
+    }
+
     //Generates level as close to the target score
     public int generateLevel(WordGrid grid) {
         grid.clearLetters(grid.getActualNodes());
         int actualScore = 0;
         int minLength = maxWordLength;
         int maxLength = maxWordLength;
-        try {
-            if (gamemode.equalsIgnoreCase("words")) {
-                currentDictionary.loadDictionary("resources/dictionary/words.txt");
-                currentDictionary.loadHashSet("resources/dictionary/words.txt");
-            } else if (gamemode.equalsIgnoreCase("animals")) {
-                currentDictionary.loadDictionary("resources/dictionary/commonAnimals.txt");
-            } else if (gamemode.equalsIgnoreCase("people")) {
-                currentDictionary.loadDictionary("resources/dictionary/commonNames.txt");
-            }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
+
+        checkDictionary(gamemode);
         for (int i = 0; i < levelDifficulty; i++) {
             String randWord = currentDictionary.getRandomWord(currentDictionary.getWordList(), minLength, maxLength);
             if (grid.insertWord(randWord)) {
@@ -113,6 +114,24 @@ public class Level {
         return score;
     }
 
+    public boolean checkCompletion(int currentScore){
+        if(currentScore >= targetScore){
+            isCompleted = true;
+        }else{
+            isCompleted = false;
+        }
+        return isCompleted;
+    }
+
+    public boolean checkCompletion(){
+        return isCompleted;
+    }
+
+
+
+    public void setTargetScore(int t){
+        targetScore = t;
+    }
 
     public int getLevelID() {
         return levelID;
@@ -138,7 +157,9 @@ public class Level {
         this.levelDifficulty = levelDifficulty;
     }
 
-    public void setGamemode(String gm) { gamemode = gm; }
+    public void setGamemode(String gm) {
+        gamemode = gm;
+    }
 
 
 }

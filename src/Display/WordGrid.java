@@ -9,6 +9,7 @@ import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.GridPane;
 import ui.AppGUI;
+import ui.AppMessageDialogSingleton;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -83,7 +84,6 @@ public class WordGrid {
 
     public void setupNodeHandlers(LetterNode node){
         node.getButton().setOnDragEntered(e ->{
-            System.out.println("Entered");
             if(isAdjacent(selectedNodes.get(selectedNodes.size() - 1).index,node.index)){
                 selectedNodes.add(node);
                 highlightSelected(selectedNodes);
@@ -94,7 +94,6 @@ public class WordGrid {
             ClipboardContent content = new ClipboardContent();
             content.putString("Hello!");
             db.setContent(content);
-            System.out.println("Drag detected " + node.index);
             resetNodeStyle(selectedNodes);
             selectedNodes.clear();
             selectedNodes.add(node);
@@ -110,6 +109,15 @@ public class WordGrid {
                 gameData.getGuessedWords().add(getSelectedWord());
                 BuzzGUI.stateController.getGameState().updateCorrect(gameData.getGuessedWords());
                 BuzzGUI.stateController.getGameState().setCurrentScore(gameData.getCurrentScore());
+                //If the player won
+                if(BuzzGUI.stateController.getGameState().getCurrentLevel().checkCompletion(gameData.getCurrentScore())){
+                    System.out.println("You Won!"); //Stop timer, Dispay message, unlock next level
+                    AppMessageDialogSingleton dialog = AppMessageDialogSingleton.getSingleton();
+                    gameData.updateCompleted();
+                    dialog.show("Congratulations!","You Won!");
+                    gameData.updateLoggedIn();
+
+                }
             }
         });
     }

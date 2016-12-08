@@ -13,7 +13,9 @@ import java.util.Scanner;
  */
 public class Dictionary {
 
+
     private String dictPath;
+    private String gamemode;
     private HashSet<String> allWords;
     private ArrayList<String> wordList;
 
@@ -78,6 +80,8 @@ public class Dictionary {
 
     }
 
+    public String getGamemode(){ return gamemode; }
+    public void setGamemode(String g){ gamemode = g; }
     public ArrayList<String> getWordList(){
         return wordList;
     }
