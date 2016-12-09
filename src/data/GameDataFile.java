@@ -17,6 +17,7 @@ public class GameDataFile implements AppFileComponent{
 
     public static final String USERNAME = "USERNAME";
     public static final String PASSWORD = "PASSWORD";
+    public static final String HIGHSCORE = "HIGHSCORE";
     public static final String WORD_LEVELS = "WORD_LEVELS";
     public static final String ANIMAL_LEVELS = "ANIMAL_LEVELS";
     public static final String PEOPLE_LEVELS = "PEOPLE_LEVELS";
@@ -40,24 +41,26 @@ public class GameDataFile implements AppFileComponent{
             generator.writeStringField(USERNAME,profile.getUsername());
             generator.writeStringField(PASSWORD,profile.getPassword());
 
+            generator.writeNumberField(HIGHSCORE,profile.getHighScore());
+
             generator.writeFieldName(WORD_LEVELS);
             generator.writeStartArray(wordLevels.size());
             for(Level lvl: wordLevels){
-                generator.writeString(Integer.toString(lvl.getLevelID()));
+                generator.writeNumber(lvl.getLevelID());
             }
             generator.writeEndArray();
 
             generator.writeFieldName(ANIMAL_LEVELS);
             generator.writeStartArray(animalLevels.size());
             for(Level lvl: animalLevels){
-                generator.writeString(Integer.toString(lvl.getLevelID()));
+                generator.writeNumber(lvl.getLevelID());
             }
             generator.writeEndArray();
 
             generator.writeFieldName(PEOPLE_LEVELS);
             generator.writeStartArray(peopleLevels.size());
             for(Level lvl: peopleLevels){
-                generator.writeString(Integer.toString(lvl.getLevelID()));
+                generator.writeNumber(lvl.getLevelID());
             }
             generator.writeEndArray();
 
@@ -96,20 +99,36 @@ public class GameDataFile implements AppFileComponent{
                         System.out.println("Password: " + jsonParser.getValueAsString());
                         gameData.setPassword(jsonParser.getValueAsString());
                         break;
+                    case HIGHSCORE:
+                        jsonParser.nextToken();
+                        gameData.setHighScore(jsonParser.getValueAsInt());
+                        break;
                     case WORD_LEVELS:
                         jsonParser.nextToken();
-                        while(jsonParser.nextToken() != JsonToken.END_ARRAY)
-                            gameData.getWordLevelsCompleted().add(new Level(jsonParser.getIntValue(),7));
+                        while(jsonParser.nextToken() != JsonToken.END_ARRAY) {
+                            Level l = new Level(jsonParser.getIntValue(),7);
+                            l.setUnlocked(true);
+                            l.checkCompletion(9999999);
+                            gameData.getWordLevelsCompleted().add(l);
+                        }
                         break;
                     case ANIMAL_LEVELS:
                         jsonParser.nextToken();
-                        while(jsonParser.nextToken() != JsonToken.END_ARRAY)
-                            gameData.getAnimalLevelsCompleted().add(new Level(jsonParser.getIntValue(),7));
+                        while(jsonParser.nextToken() != JsonToken.END_ARRAY) {
+                            Level l = new Level(jsonParser.getIntValue(),7);
+                            l.setUnlocked(true);
+                            l.checkCompletion(9999999);
+                            gameData.getAnimalLevelsCompleted().add(l);
+                        }
                         break;
                     case PEOPLE_LEVELS:
                         jsonParser.nextToken();
-                        while(jsonParser.nextToken() != JsonToken.END_ARRAY)
-                            gameData.getPeopleLevelsCompleted().add(new Level(jsonParser.getIntValue(),7));
+                        while(jsonParser.nextToken() != JsonToken.END_ARRAY) {
+                            Level l = new Level(jsonParser.getIntValue(),7);
+                            l.setUnlocked(true);
+                            l.checkCompletion(9999999);
+                            gameData.getPeopleLevelsCompleted().add(l);
+                        }
                         break;
                     default:
                         throw new JsonParseException(jsonParser, "Unable to load JSON data");

@@ -2,6 +2,7 @@ package Display;
 
 import apptemplate.AppTemplate;
 import controller.BuzzwordController;
+import data.Dictionary;
 import data.GameData;
 import data.Level;
 import javafx.scene.input.ClipboardContent;
@@ -103,29 +104,48 @@ public class WordGrid {
             System.out.println(getSelectedWord());
             highlightSelected(selectedNodes);
             //Selected word is a word and hasn't been guessed
-            if(Level.currentDictionary.isWord(getSelectedWord()) && !gameData.getGuessedWords().contains(getSelectedWord())){
-                //Correct Guess!
-                gameData.setCurrentScore(gameData.getCurrentScore() + Level.calcWordScore(getSelectedWord()));
-                gameData.getGuessedWords().add(getSelectedWord());
-                BuzzGUI.stateController.getGameState().updateCorrect(gameData.getGuessedWords());
-                BuzzGUI.stateController.getGameState().setCurrentScore(gameData.getCurrentScore());
-                //If the player won
-                if(BuzzGUI.stateController.getGameState().getCurrentLevel().checkCompletion(gameData.getCurrentScore())){
-                    System.out.println("You Won!"); //Stop timer, Dispay message, unlock next level
-                    AppMessageDialogSingleton dialog = AppMessageDialogSingleton.getSingleton();
-                    gameData.updateCompleted();
-                    dialog.show("Congratulations!","You Won!");
-                    gameData.updateLoggedIn();
-
-                }
+            if(correctWord(getSelectedWord())){
+                //Check if the player won
+                if(BuzzGUI.stateController.getGameState().getCurrentLevel().checkCompletion(gameData.getCurrentScore()))
+                    winGame();
             }
+            resetNodeStyle(selectedNodes);
         });
+    }
+
+    public void winGame(){
+        System.out.println("You Won!"); //Stop timer, Dispay message, unlock next level
+        AppMessageDialogSingleton dialog = AppMessageDialogSingleton.getSingleton();
+        gameData.updateCompleted();
+        dialog.show("Congratulations!","You Won!");
+        gameData.getGuessedWords().clear();
+        if(Level.currentDictionary.getGamemode().equalsIgnoreCase("words")){
+            gameData.getLoggedIn().getWordLevelsCompleted().add(BuzzGUI.stateController.getGameState().getCurrentLevel());
+        }
+        BuzzGUI.stateController.getGameState().getGuesses().clear();
+        resetNodeStyle(selectedNodes);
+        gameData.updateLoggedIn();
+    }
+
+    //Checks if the word is valid, then checks if it has already been guesses
+    public boolean correctWord(String word){
+        if(Level.currentDictionary.isWord(word) && !gameData.getGuessedWords().contains(word)) {
+            gameData.setCurrentScore(gameData.getCurrentScore() + Level.calcWordScore(getSelectedWord()));
+            gameData.getGuessedWords().add(getSelectedWord());
+            BuzzGUI.stateController.getGameState().updateCorrect(gameData.getGuessedWords());
+            BuzzGUI.stateController.getGameState().setCurrentScore(gameData.getCurrentScore());
+            return true;
+        }
+        return false;
     }
 
     public void highlightSelected(ArrayList<LetterNode> nodes){
         for(LetterNode n: nodes){
             n.getButton().getStyleClass().setAll("selectedLetternode");
         }
+    }
+    public void highlightSelected(LetterNode node){
+            node.getButton().getStyleClass().setAll("selectedLetternode");
     }
     public void resetNodeStyle(ArrayList<LetterNode> nodes){
         for(LetterNode n: nodes){
@@ -278,6 +298,58 @@ public class WordGrid {
         }
     }
 
+
+    //Handles letter highlights
+    public void highlightLetter(char a){
+        if(selectedNodes.isEmpty()){
+            for (LetterNode node: actualNodes) {
+                if(Character.toUpperCase(node.getLetter()) == Character.toUpperCase(a)) {
+                    selectedNodes.add(node);
+                    highlightSelected(node);
+                }
+            }
+        }else{
+            highlightAjd(selectedNodes.get(selectedNodes.size() - 1).getLetter(),a);
+        }
+    }
+
+    //Finds nodes with character c, and highlights the surrounding nodes with ajd
+    public boolean highlightAjd(char c, char adj){
+        c = Character.toUpperCase(c);
+        boolean found = false;
+        adj = Character.toUpperCase(adj);
+        for(int i= 0; i < actualNodes.size(); i++){
+            if(actualNodes.get(i).getLetter() == c){
+                //Check surrounding nodes to see if they are ajd
+                if(getAbove(i) != -1 && actualNodes.get(getAbove(i)).getLetter() == adj){
+                    found = true;
+                    highlightSelected(actualNodes.get(getAbove(i)));
+                }else if(getBelow(i) != -1 && actualNodes.get(getBelow(i)).getLetter() == adj){
+                    found = true;
+                    highlightSelected(actualNodes.get(getBelow(i)));
+                }else if(getLeft(i) != -1 && actualNodes.get(getLeft(i)).getLetter() == adj){
+                    found = true;
+                    highlightSelected(actualNodes.get(getLeft(i)));
+                }else if(getBelow(i) != -1 && actualNodes.get(getBelow(i)).getLetter() == adj){
+                    found = true;
+                    highlightSelected(actualNodes.get(getBelow(i)));
+                }
+                if (found)
+                    selectedNodes.add(actualNodes.get(i));
+            }
+        }
+        return found;
+    }
+
+    //Called when the player presses enter
+    public void finishWord(){
+        System.out.println("Selected: " + getSelectedWord());
+        if(correctWord(getSelectedWord())){
+            selectedNodes.clear();
+            winGame();
+        }
+        selectedNodes.clear();
+    }
 
     //Gets index of relative to index i. Returns Null if invalid
     public int getRight(int i){

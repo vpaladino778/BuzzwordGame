@@ -78,6 +78,7 @@ public class Level {
         int actualScore = 0;
         int minLength = maxWordLength;
         int maxLength = maxWordLength;
+        actualScore = 0;
 
         checkDictionary(gamemode);
         for (int i = 0; i < levelDifficulty; i++) {

@@ -15,6 +15,8 @@ public class Profile implements AppDataComponent{
     private String username;
     private String password;
 
+    private int highScore;
+
     private ArrayList<Level> wordLevelsCompleted;
     private ArrayList<Level> animalLevelsCompleted;
     private ArrayList<Level> peopleLevelsCompleted;
@@ -25,6 +27,7 @@ public class Profile implements AppDataComponent{
         peopleLevelsCompleted = new ArrayList<>();
         username = "";
         password = "";
+        highScore = 0;
     }
     public Profile(String username, String password){
 
@@ -82,6 +85,16 @@ public class Profile implements AppDataComponent{
         return md5;
     }
     public void setUsername(String u){ username = u; }
+
+    public int getHighScore() {
+        return highScore;
+    }
+
+    public void setHighScore(int h) {
+        if(h > highScore){
+            highScore = h;
+        }
+    }
 
     public String getPassword(){ return password; }
     public void setPassword(String pw) { password = pw; }

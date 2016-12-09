@@ -16,20 +16,20 @@ public class Dictionary {
 
     private String dictPath;
     private String gamemode;
-    private HashSet<String> allWords;
+    private HashSet<String> wordSet;
     private ArrayList<String> wordList;
 
 
     public Dictionary(){
         wordList = new ArrayList<>();
-        allWords = new HashSet<>();
+        wordSet = new HashSet<>();
     }
 
     public boolean isWord(String word){
-        if(!allWords.isEmpty()){ //allWords has been loaded
-            return allWords.contains(word.trim().toLowerCase());
+        if(!wordSet.isEmpty()){ //wordSet has been loaded
+            return wordSet.contains(word.trim().toUpperCase());
         }else{
-            return wordList.contains(word.trim().toLowerCase());
+            return wordList.contains(word.trim().toUpperCase());
         }
     }
     //Loads dictionary at location returns false if the file is not found
@@ -40,7 +40,7 @@ public class Dictionary {
         while(dict.hasNext()){
             String next = dict.next();
             if(next.indexOf("'") == -1 && next.length() >= 3) { //If it contains no apostrophes and is longer than 3 words
-                wordList.add(next.trim().toLowerCase());
+                wordList.add(next.trim().toUpperCase());
             }
         }
 
@@ -53,11 +53,13 @@ public class Dictionary {
         while(dict.hasNext()){
             String next = dict.next();
             if(next.indexOf("'") == -1 && next.length() >= 3) { //If it contains no apostrophes and is longer than 3 words
-                allWords.add(next.trim().toLowerCase());
+                wordSet.add(next.trim().toUpperCase());
             }
         }
-
     }
+
+
+
     //Gets random word within an arraylist
     public static String getRandomWord(ArrayList<String> set){
         int rand = new Random().nextInt(set.size());

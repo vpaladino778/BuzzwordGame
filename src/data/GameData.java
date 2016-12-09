@@ -159,14 +159,16 @@ public class GameData implements AppDataComponent{
     public void updateCompleted(){
         for(int i = 0; i < wordLevels.size() - 1; i++){
             if(wordLevels.get(i).checkCompletion()){
-                wordLevels.get(i +1 ).setUnlocked(true);
+                wordLevels.get(i + 1 ).setUnlocked(true);
                 wordLevels.get(i+1).updateDisabled();
             }
         }
     }
     public void updateLoggedIn(){
         try {
-            gameDataFile.saveData(loggedIn, Paths.get("resources/saved/" + loggedIn.getUsername() + ".json"));
+            if(loggedIn != null) {
+                gameDataFile.saveData(loggedIn, Paths.get("resources/saved/" + loggedIn.getUsername() + ".json"));
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }

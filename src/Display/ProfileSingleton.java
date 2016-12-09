@@ -28,6 +28,7 @@ public class ProfileSingleton extends Stage {
     private GameData gameData;
     private Alert profileAlert;
     private Profile loggedInProfile;
+    private Text highScoreText;
     private PasswordField password;
 
     private ProfileSingleton() {
@@ -110,6 +111,7 @@ public class ProfileSingleton extends Stage {
 
     private void buildProfileAlert(Alert alert){
         loggedInProfile = gameData.getLoggedIn();
+        highScoreText = new Text("High Score: " + loggedInProfile.getHighScore());
         alert.setTitle(loggedInProfile.getUsername() + "'s Profile");
         VBox alertVBox = new VBox();
         Text username = new Text(loggedInProfile.getUsername() + ":");
@@ -117,7 +119,7 @@ public class ProfileSingleton extends Stage {
         Text wordCompleted = new Text("Word Levels Completed: " + getLevelsCompleted(loggedInProfile.getWordLevelsCompleted()));
         Text animalsCompleted = new Text("Animals Levels Completed: " + getLevelsCompleted(loggedInProfile.getAnimalLevelsCompleted()));
         Text peopleCompleted = new Text("People Levels Completed: " + getLevelsCompleted(loggedInProfile.getPeopleLevelsCompleted()));
-        alertVBox.getChildren().addAll(username,wordCompleted,animalsCompleted,peopleCompleted);
+        alertVBox.getChildren().addAll(username,highScoreText,wordCompleted,animalsCompleted,peopleCompleted);
         alert.getDialogPane().setContent(alertVBox);
         alert.getButtonTypes().addAll(ButtonType.OK);
 
@@ -134,4 +136,5 @@ public class ProfileSingleton extends Stage {
     public void setGameData(GameData gameData){
         this.gameData = gameData;
     }
+
 }

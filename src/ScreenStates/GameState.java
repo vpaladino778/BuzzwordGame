@@ -4,9 +4,11 @@ import Display.WordGrid;
 import apptemplate.AppTemplate;
 import data.Level;
 import data.Word;
+import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -19,6 +21,9 @@ import javafx.scene.text.Text;
 import propertymanager.PropertyManager;
 
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Created by vpala on 11/9/2016.
@@ -130,6 +135,8 @@ public class GameState extends State{
         totalScore.setText("Total Score: " + score + " pts");
 
     }
+
+
 
     public void setTargetScore(int score){
         targetScore = score;

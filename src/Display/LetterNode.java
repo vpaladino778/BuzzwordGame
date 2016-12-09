@@ -54,7 +54,7 @@ public class LetterNode {
     }
 
     public char getLetter() {
-        return letter;
+        return Character.toUpperCase(letter);
     }
 
     public boolean isSelected() {

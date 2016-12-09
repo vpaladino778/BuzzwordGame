@@ -51,9 +51,3 @@
 .letternode:hover{
     -fx-effect: dropshadow(gaussian, rgba(50,80,200,0.7), 1, 1, 1, 1);
 }
-.letternode:selected{
-    -fx-background-color:
-            #000000,
-            linear-gradient(#299a0b, #075B4C);
-
-}

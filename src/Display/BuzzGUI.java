@@ -1,12 +1,14 @@
 package Display;
 
-import ScreenStates.StateController;
+import ScreenStates.*;
 import apptemplate.AppTemplate;
 import components.AppWorkspaceComponent;
 import controller.BuzzwordController;
 import data.GameData;
 import data.Level;
 import javafx.scene.Scene;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
 import javafx.util.Pair;
 import ui.AppGUI;
@@ -65,42 +67,59 @@ public class BuzzGUI extends AppWorkspaceComponent {
     }
 
     public void setupButtonHandlers() {
+
+        GameState gameState =  stateController.getGameState();
+        LevelState levelState =  stateController.getLevelState();
+        MenuState menuState = stateController.getMenuState();
+
+
+        gameState.getStateScene().setOnKeyPressed(e ->{
+            if(e.getCode().isLetterKey()){
+                    System.out.println("Char " + e.getCode().toString());
+                    gameState.getWordGrid().highlightLetter(Character.toUpperCase(e.getCode().toString().charAt(0)));
+            }else if(e.getCode() == KeyCode.ENTER){
+                System.out.println("Enter Pressed");
+                gameState.getWordGrid().finishWord();
+
+            }
+
+        });
         //Menu Screen
-        stateController.getMenuState().getLevelButton().setOnAction(e -> {
-                    stateController.setCurrentState(stateController.getLevelState());
-                    stateController.getLevelState().setGamemode(stateController.getMenuState().getGameMode());
+        menuState.getLevelButton().setOnAction(e -> {
+                    stateController.setCurrentState(levelState);
+                    levelState.setGamemode(menuState.getGameMode());
                     layoutGUI();
                 }
         );
         //Level button Handlers
-        ArrayList<Level> wordLevels = stateController.getLevelState().getWordLevels();
+        ArrayList<Level> wordLevels = levelState.getWordLevels();
         for (Level level : wordLevels) {
             level.getLevelButton().setOnAction(e -> {
-                stateController.getGameState().setCurrentLevel(level);
-                int targetScore = level.generateLevel(stateController.getGameState().getWordGrid());
+                gameState.setCurrentLevel(level);
+                int targetScore = level.generateLevel(gameState.getWordGrid());
                 level.setTargetScore(targetScore);
-                stateController.getGameState().setTargetScore(targetScore);
-                stateController.setCurrentState(stateController.getGameState());
+                gameState.setTargetScore(targetScore);
+                stateController.setCurrentState(gameState);
                 layoutGUI();
             });
         }
-        stateController.getMenuState().getPlayButton().setOnAction(e -> {
-                    stateController.setCurrentState(stateController.getGameState());
+        menuState.getPlayButton().setOnAction(e -> {
+                    stateController.setCurrentState(gameState);
                     layoutGUI();
                 }
         );
-        stateController.getMenuState().getLoginButton().setOnAction(e -> {
+        menuState.getLoginButton().setOnAction(e -> {
                     Optional<Pair<String, String>> unpw;
                     if (!BuzzwordController.IsLoggedIn) {
                         unpw = ProfileSingleton.getSingleton().showDialog();
                         if (unpw.isPresent() && gameData.logIn(unpw.get().getKey(), unpw.get().getValue())) {
                             //Log in was successful
                             BuzzwordController.IsLoggedIn = true;
-                            stateController.getMenuState().getLoginButton().setText(unpw.get().getKey());
-                            stateController.getMenuState().getCreateProfile().setText("Logout");
+                            menuState.getLoginButton().setText(unpw.get().getKey());
+                            menuState.getCreateProfile().setText("Logout");
                         } else {
                             BuzzwordController.IsLoggedIn = false;
-                            stateController.getMenuState().getLoginButton().setText("Login");
+                            menuState.getLoginButton().setText("Login");
 
                         }
                     } else {
@@ -108,7 +127,7 @@ public class BuzzGUI extends AppWorkspaceComponent {
                     }
                 }
         );
-        stateController.getMenuState().getCreateProfile().setOnAction(e -> {
+        menuState.getCreateProfile().setOnAction(e -> {
                     if (BuzzwordController.IsLoggedIn == false) {
                         Optional<Pair<String, String>> newProfile = CreateProfileSingleton.getSingleton().showDialog();
                         if (newProfile.isPresent()) {
@@ -116,27 +135,27 @@ public class BuzzGUI extends AppWorkspaceComponent {
                         }
                     }else{
                         //Logout Button
-                        stateController.getMenuState().getCreateProfile().setText("Create Profile");
+                        menuState.getCreateProfile().setText("Create Profile");
                         BuzzwordController.IsLoggedIn = false;
-                        stateController.getMenuState().getLoginButton().setText("Login");
+                        menuState.getLoginButton().setText("Login");
                     }
                 }
         );
-        stateController.getMenuState().getExitButton().setOnAction(e -> {
+        menuState.getExitButton().setOnAction(e -> {
                     System.exit(0);
                 }
         );
         //Level Screen
-        stateController.getLevelState().getHomeButton().setOnAction(e -> {
-                    stateController.setCurrentState(stateController.getMenuState());
+        levelState.getHomeButton().setOnAction(e -> {
+                    stateController.setCurrentState(menuState);
                     layoutGUI();
                 }
         );
-        stateController.getLevelState().getExitButton().setOnAction(e -> {
+        levelState.getExitButton().setOnAction(e -> {
                     System.exit(0);
                 }
         );
-        stateController.getLevelState().getProfileButton().setOnAction(e -> {
+        levelState.getProfileButton().setOnAction(e -> {
                     //Open the profile screen
             if(BuzzwordController.IsLoggedIn){
                 ProfileSingleton.getSingleton().showDialog();
@@ -146,24 +165,29 @@ public class BuzzGUI extends AppWorkspaceComponent {
                 }
         );
         //Game screen
-        stateController.getGameState().getHomeButton().setOnAction(e -> {
-                    stateController.setCurrentState(stateController.getMenuState());
+        gameState.getHomeButton().setOnAction(e -> {
+                    stateController.setCurrentState(menuState);
                     layoutGUI();
                 }
         );
-        stateController.getGameState().getExitButton().setOnAction(e -> {
+        gameState.getExitButton().setOnAction(e -> {
                     YesNoCancelDialogSingleton yesNoDialog = YesNoCancelDialogSingleton.getSingleton();
-                    yesNoDialog.show("Confirm Exit", "Are you sure you want to quit?");
+            gameState.pauseGame();
+            yesNoDialog.show("Confirm Exit", "Are you sure you want to quit?");
                     if (yesNoDialog.getSelection().equals(YesNoCancelDialogSingleton.YES)) {
                         System.exit(0);
+                    }else if (yesNoDialog.getSelection().equals(YesNoCancelDialogSingleton.NO)) {
+                            gameState.unPauseGame();
+                    } else if (yesNoDialog.getSelection().equals(YesNoCancelDialogSingleton.CANCEL)) {
+                            gameState.unPauseGame();
                     }
                 }
         );
-        stateController.getGameState().getPauseButton().setOnAction(e -> {
-            if (stateController.getGameState().isPaused()) {
-                stateController.getGameState().unPauseGame();
+        gameState.getPauseButton().setOnAction(e -> {
+            if (gameState.isPaused()) {
+                gameState.unPauseGame();
             } else {
-                stateController.getGameState().pauseGame();
+                gameState.pauseGame();
             }
         });
 
