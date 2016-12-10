@@ -5,6 +5,8 @@ import apptemplate.AppTemplate;
 import data.Dictionary;
 import data.GameData;
 import data.Profile;
+import javafx.animation.Timeline;
+import javafx.scene.text.Text;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -14,11 +16,15 @@ import java.io.IOException;
  */
 public class BuzzwordController implements FileController{
 
+
     private StateController stateController;
     private AppTemplate appTemplate;
     private GameData gameData;
     public static boolean IsLoggedIn = false;
     private Profile profile;
+
+    //Timer
+    private Timeline timeline;
 
     //Dictionaries
     public static Dictionary wordsDictionary;
@@ -44,6 +50,11 @@ public class BuzzwordController implements FileController{
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
+    }
+
+    public void startTimer(Text timerLabel){
+
+
     }
 
     public StateController getStateController(){ return stateController; }

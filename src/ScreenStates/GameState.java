@@ -2,13 +2,13 @@ package ScreenStates;
 
 import Display.WordGrid;
 import apptemplate.AppTemplate;
+import controller.BuzzwordController;
+import data.BuzzTimer;
 import data.Level;
 import data.Word;
-import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.concurrent.Task;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -19,11 +19,9 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import propertymanager.PropertyManager;
+import ui.AppGUI;
 
 import java.util.ArrayList;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Created by vpala on 11/9/2016.
@@ -44,15 +42,20 @@ public class GameState extends State{
     private ObservableList<Word> correctGuesses;
     private boolean paused;
     private Text levelText;
-
     private WordGrid wordGrid;
+
+    private Text timeRemaining;
+
+    private BuzzwordController controller;
+    private AppGUI gui;
 
     public GameState(AppTemplate appTemplate){
         super();
         currentScore = 0;
         targetScore = 0;
         wordGrid = new WordGrid(4,4, appTemplate);
-
+        gui = appTemplate.getGUI();
+        //controller = (BuzzwordController) gui.getFileController();
         currentLevel = new Level(0,0);
         layoutGUI();
     }
@@ -99,7 +102,8 @@ public class GameState extends State{
         Text heading = new Text("BuzzWord!");
         heading.getStyleClass().add("header-text");
 
-        Text timeRemaining = new Text("Time Remaining: 40");
+        timeRemaining = new Text();
+        timeRemaining.getStyleClass().addAll("timer");
         target = new Text();
         setTargetScore(targetScore);
         totalScore = new Text();
@@ -130,13 +134,23 @@ public class GameState extends State{
 
     }
 
+    public void startLevel(){
+        BuzzTimer timer = new BuzzTimer(timeRemaining);
+        timer.startTimer();
+        setCurrentScore(0);
+        unPauseGame();
+        correctGuesses.clear();
+    }
+
     public void setCurrentScore(int score){
         currentScore = score;
         totalScore.setText("Total Score: " + score + " pts");
 
     }
 
-
+    public Text getTimeRemaining(){
+        return timeRemaining;
+    }
 
     public void setTargetScore(int score){
         targetScore = score;

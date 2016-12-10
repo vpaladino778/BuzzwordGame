@@ -1,13 +1,12 @@
 package data;
 
+import Display.BuzzGUI;
 import Display.LetterNode;
 import Display.WordGrid;
 import ScreenStates.LevelState;
 import controller.BuzzwordController;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
-
-import java.io.FileNotFoundException;
 
 /**
  * Created by vpala on 11/14/2016.
@@ -96,6 +95,9 @@ public class Level {
         fillEmptySpace(grid);
         targetScore = actualScore;
         grid.findWords();
+
+
+        BuzzGUI.stateController.getGameState().startLevel(); //Gets the level ready to start
         return actualScore;
     }
 

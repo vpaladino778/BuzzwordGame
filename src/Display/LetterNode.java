@@ -2,9 +2,6 @@ package Display;
 
 import javafx.geometry.Insets;
 import javafx.scene.control.ToggleButton;
-import javafx.scene.input.ClipboardContent;
-import javafx.scene.input.Dragboard;
-import javafx.scene.input.TransferMode;
 import javafx.scene.layout.StackPane;
 
 import java.util.concurrent.ThreadLocalRandom;
@@ -24,6 +21,7 @@ public class LetterNode {
 
     public LetterNode(char let){
         letter = let;
+        selected = false;
         buttonPane = new StackPane();
         button = new ToggleButton();
         button.setText(String.valueOf(letter));
@@ -59,6 +57,10 @@ public class LetterNode {
 
     public boolean isSelected() {
         return selected;
+    }
+
+    public void setSelected(boolean b){
+        selected = b;
     }
 
     public ToggleButton getButton() {
