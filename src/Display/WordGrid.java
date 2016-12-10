@@ -119,7 +119,7 @@ public class WordGrid {
         gameData.updateCompleted();
         dialog.show("Congratulations!","You Won!");
         gameData.getGuessedWords().clear();
-        if(Level.currentDictionary.getGamemode().equalsIgnoreCase("words")){
+        if(Level.currentDictionary.getGamemode().equalsIgnoreCase("words") && gameData.getLoggedIn() != null){
             gameData.getLoggedIn().getWordLevelsCompleted().add(BuzzGUI.stateController.getGameState().getCurrentLevel());
         }
         BuzzGUI.stateController.getGameState().getGuesses().clear();
@@ -309,13 +309,17 @@ public class WordGrid {
                 }
             }
         }else{
-            highlightAjd(selectedNodes.get(selectedNodes.size() - 1).getLetter(),a);
+            LetterNode node = highlightAjd(selectedNodes.get(selectedNodes.size() - 1).getLetter(),a);
+            if(node != null){
+                selectedNodes.add(node);
+            }
         }
     }
 
     //Finds nodes with character c, and highlights the surrounding nodes with ajd
-    public boolean highlightAjd(char c, char adj){
+    public LetterNode highlightAjd(char c, char adj){
         c = Character.toUpperCase(c);
+        LetterNode node = null;
         boolean found = false;
         adj = Character.toUpperCase(adj);
         for(int i= 0; i < actualNodes.size(); i++){
@@ -323,22 +327,24 @@ public class WordGrid {
                 //Check surrounding nodes to see if they are ajd
                 if(getAbove(i) != -1 && actualNodes.get(getAbove(i)).getLetter() == adj){
                     found = true;
+                    node = actualNodes.get(getAbove(i));
                     highlightSelected(actualNodes.get(getAbove(i)));
                 }else if(getBelow(i) != -1 && actualNodes.get(getBelow(i)).getLetter() == adj){
                     found = true;
+                    node = actualNodes.get(getBelow(i));
                     highlightSelected(actualNodes.get(getBelow(i)));
                 }else if(getLeft(i) != -1 && actualNodes.get(getLeft(i)).getLetter() == adj){
                     found = true;
+                    node = actualNodes.get(getLeft(i));
                     highlightSelected(actualNodes.get(getLeft(i)));
                 }else if(getBelow(i) != -1 && actualNodes.get(getBelow(i)).getLetter() == adj){
                     found = true;
+                    node = actualNodes.get(getBelow(i));
                     highlightSelected(actualNodes.get(getBelow(i)));
                 }
-                if (found)
-                    selectedNodes.add(actualNodes.get(i));
             }
         }
-        return found;
+        return node;
     }
 
     //Called when the player presses enter
@@ -346,8 +352,10 @@ public class WordGrid {
         System.out.println("Selected: " + getSelectedWord());
         if(correctWord(getSelectedWord())){
             selectedNodes.clear();
-            winGame();
+            if(BuzzGUI.stateController.getGameState().getCurrentLevel().checkCompletion(gameData.getCurrentScore()))
+                winGame();
         }
+        resetNodeStyle(selectedNodes);
         selectedNodes.clear();
     }
 
