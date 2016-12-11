@@ -87,6 +87,17 @@ public class BuzzGUI extends AppWorkspaceComponent {
                 System.out.println("Enter Pressed");
                 gameState.getWordGrid().finishWord();
 
+            }else if(e.getCode() == KeyCode.DIGIT1){
+                if(gameState.isPaused()){
+                    gameState.unPauseGame();
+                }else{
+                    gameState.pauseGame();
+                }
+            }else if(e.getCode() == KeyCode.ESCAPE){
+                System.exit(1);
+            }else if(e.getCode() == KeyCode.DIGIT2){
+                stateController.setCurrentState(menuState);
+                layoutGUI();
             }
 
         });
@@ -101,7 +112,20 @@ public class BuzzGUI extends AppWorkspaceComponent {
             HelpBoxSingleton help = HelpBoxSingleton.getSingleton();
             help.show("","");
         });
+        menuState.getStateScene().setOnKeyPressed(e ->{
+            if(e.getCode() == KeyCode.ESCAPE){
+                System.exit(1);
+            }
+        });
         //Level button Handlers
+        levelState.getStateScene().setOnKeyPressed(e ->{
+            if(e.getCode() == KeyCode.DIGIT2){
+                stateController.setCurrentState(menuState);
+                layoutGUI();
+            }else if(e.getCode() == KeyCode.ESCAPE){
+                System.exit(1);
+            }
+        });
         wordLevels = gameData.getWordLevels();
         peopleLevels = gameData.getPeopleLevels();
         animalLevels = gameData.getAnimalLevels();
