@@ -9,6 +9,7 @@ import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
@@ -114,12 +115,23 @@ public class ProfileSingleton extends Stage {
         highScoreText = new Text("High Score: " + loggedInProfile.getHighScore());
         alert.setTitle(loggedInProfile.getUsername() + "'s Profile");
         VBox alertVBox = new VBox();
+        HBox changePwBox = new HBox();
+        Text changeLabel = new Text("Change Password?: ");
+        PasswordField newPassword = new PasswordField();
+        newPassword.setPromptText("New Password");
+
+        Button changePass = new Button("Change Password");
+
+        changePass.setOnAction(e -> {
+            loggedInProfile.setPassword(newPassword.getText());
+        });
+        changePwBox.getChildren().addAll(changeLabel,newPassword,changePass);
         Text username = new Text(loggedInProfile.getUsername() + ":");
         username.setFont(Font.font(30));
         Text wordCompleted = new Text("Word Levels Completed: " + getLevelsCompleted(loggedInProfile.getWordLevelsCompleted()));
         Text animalsCompleted = new Text("Animals Levels Completed: " + getLevelsCompleted(loggedInProfile.getAnimalLevelsCompleted()));
         Text peopleCompleted = new Text("People Levels Completed: " + getLevelsCompleted(loggedInProfile.getPeopleLevelsCompleted()));
-        alertVBox.getChildren().addAll(username,highScoreText,wordCompleted,animalsCompleted,peopleCompleted);
+        alertVBox.getChildren().addAll(username,highScoreText,changePwBox,wordCompleted,animalsCompleted,peopleCompleted);
         alert.getDialogPane().setContent(alertVBox);
         alert.getButtonTypes().addAll(ButtonType.OK);
 

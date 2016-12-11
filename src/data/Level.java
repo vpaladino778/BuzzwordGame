@@ -26,7 +26,7 @@ public class Level {
     private int targetScore;
 
     public Level(int id, int maxWordLength) {
-        levelDifficulty = id + maxWordLength;
+        levelDifficulty = id + 2;
         this.maxWordLength = maxWordLength;
         if (maxWordLength < 3)
             maxWordLength = 3;
@@ -78,13 +78,17 @@ public class Level {
         grid.setGameOver(false);
         grid.clearLetters(grid.getActualNodes());
         int actualScore = 0;
+        String randWord = "";
         int minLength = 3;
         int maxLength = maxWordLength;
+        if(maxLength < 3){
+            maxLength = 3;
+        }
         actualScore = 0;
         gamemode = LevelState.gamemode;
         checkDictionary(gamemode);
         for (int i = 0; i < levelDifficulty; i++) {
-            String randWord = currentDictionary.getRandomWord(currentDictionary.getWordList(), minLength, maxLength);
+             randWord = currentDictionary.getRandomWord(currentDictionary.getWordList(), minLength, maxLength);
             if (grid.insertWord(randWord)) {
                 actualScore += Level.calcWordScore(randWord);
             }
@@ -96,6 +100,7 @@ public class Level {
 
 
         BuzzGUI.stateController.getGameState().startLevel(); //Gets the level ready to start
+        actualScore = actualScore - Level.calcWordScore(randWord);
         return actualScore;
     }
 

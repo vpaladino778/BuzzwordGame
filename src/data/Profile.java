@@ -108,5 +108,5 @@ public class Profile implements AppDataComponent{
     }
 
     public String getPassword(){ return password; }
-    public void setPassword(String pw) { password = pw; }
+    public void setPassword(String pw) { password = md5(pw); }
 }

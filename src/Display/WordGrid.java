@@ -122,7 +122,10 @@ public class WordGrid {
     public void winGame() {
         System.out.println("You Won!"); //Stop timer, Dispay message, unlock next level
         AppMessageDialogSingleton dialog = AppMessageDialogSingleton.getSingleton();
-        gameData.updateCompleted();
+        gameData.updateCompleted(gameData.getWordLevels());
+        gameData.updateCompleted(gameData.getAnimalLevels());
+        gameData.updateCompleted(gameData.getPeopleLevels());
+
         BuzzGUI.stateController.getGameState().getCurrentLevel().updateDisabled();
         gameData.getGuessedWords().clear();
         if(gameData.getLoggedIn() != null) {

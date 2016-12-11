@@ -65,14 +65,18 @@ public class GameData implements AppDataComponent{
         wordLevels.add( new Level(5,6));
 
         Level peopleLvl;
-        for(int i = 1; i <= 8; i ++){
-            peopleLvl = new Level(i,i);
+        for(int i = 1; i <= 4; i ++){
+            peopleLvl = new Level(i,i+2);
             peopleLvl.setGamemode("people");
             peopleLevels.add(peopleLvl);
 
         }
+        Level aLevel;
         for(int i = 1; i <= 6; i ++){
-            animalLevels.add(new Level(i,i));
+            aLevel = new Level(i,i+2);
+            aLevel.setGamemode("animals");
+            animalLevels.add(aLevel);
+
         }
     }
 
@@ -84,7 +88,10 @@ public class GameData implements AppDataComponent{
                 //Login information is correct
                 loggedIn = p;
                 updateLevels(p);
-                updateCompleted();
+                updateCompleted(wordLevels);
+                updateCompleted(peopleLevels);
+                updateCompleted(animalLevels);
+
                 dialogSingleton.show("Login was successfull",username + " has been logged in successfully!");
                 return true;
             }
@@ -106,16 +113,20 @@ public class GameData implements AppDataComponent{
         for(int i = 0; i < p.getWordLevelsCompleted().size(); i++){
             if(p.getWordLevelsCompleted().get(i).getLevelID() == wordLevels.get(i).getLevelID()){
                 wordLevels.get(i).setUnlocked(true);
+                wordLevels.get(i+1).setUnlocked(true);
+
             }
         }
         for(int i = 0; i < p.getAnimalLevelsCompleted().size(); i++){
             if(p.getAnimalLevelsCompleted().get(i).getLevelID() == animalLevels.get(i).getLevelID()){
-                wordLevels.get(i).setUnlocked(true);
+                animalLevels.get(i).setUnlocked(true);
+                animalLevels.get(i+1).setUnlocked(true);
             }
         }
         for(int i = 0; i < p.getPeopleLevelsCompleted().size(); i++){
             if(p.getPeopleLevelsCompleted().get(i).getLevelID() == peopleLevels.get(i).getLevelID()){
                 peopleLevels.get(i).setUnlocked(true);
+                peopleLevels.get(i+1).setUnlocked(true);
             }
         }
     }
@@ -157,15 +168,15 @@ public class GameData implements AppDataComponent{
     }
 
     //Checks if any levels are completed, if they are unlocks the next level
-    public void updateCompleted(){
-        for(int i = 0; i < wordLevels.size() - 1; i++){
-            if(wordLevels.get(i) == BuzzGUI.stateController.getGameState().getCurrentLevel()){
+    public void updateCompleted(ArrayList<Level> levels){
+        for(int i = 0; i < levels.size() - 1; i++){
+            if(levels.get(i) == BuzzGUI.stateController.getGameState().getCurrentLevel()){
                 System.out.println("Level " + i + "Is the same as current level");
             }
-            if(wordLevels.get(i).checkCompletion()){
-                wordLevels.get(i + 1).setUnlocked(true);
-                wordLevels.get(i+1).updateDisabled();
-                wordLevels.get(i).updateDisabled();
+            if(levels.get(i).checkCompletion()){
+                levels.get(i + 1).setUnlocked(true);
+                levels.get(i+1).updateDisabled();
+                levels.get(i).updateDisabled();
             }
         }
     }

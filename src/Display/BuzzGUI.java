@@ -92,16 +92,13 @@ public class BuzzGUI extends AppWorkspaceComponent {
         );
         //Level button Handlers
         ArrayList<Level> wordLevels = gameData.getWordLevels();
-        for (Level level : wordLevels) {
-            level.getLevelButton().setOnAction(e -> {
-                gameState.setCurrentLevel(level);
-                int targetScore = level.generateLevel(gameState.getWordGrid());
-                level.setTargetScore(targetScore);
-                gameState.setTargetScore(targetScore);
-                stateController.setCurrentState(gameState);
-                layoutGUI();
-            });
-        }
+        ArrayList<Level> peopleLevels = gameData.getPeopleLevels();
+        ArrayList<Level> animalLevels = gameData.getAnimalLevels();
+
+        setupLevelHandlers(wordLevels,gameState);
+        setupLevelHandlers(peopleLevels,gameState);
+        setupLevelHandlers(animalLevels,gameState);
+
         menuState.getPlayButton().setOnAction(e -> {
                     stateController.setCurrentState(gameState);
                     layoutGUI();
@@ -190,6 +187,21 @@ public class BuzzGUI extends AppWorkspaceComponent {
             }
         });
 
+    }
+
+    public void setupLevelHandlers(ArrayList<Level> levels, GameState gameState){
+        for (Level level : levels) {
+            level.getLevelButton().setOnAction(e -> {
+                gameState.setCurrentLevel(level);
+                gameData.getGuessedWords().clear();
+                gameData.setCurrentScore(0);
+                int targetScore = level.generateLevel(gameState.getWordGrid());
+                level.setTargetScore(targetScore);
+                gameState.setTargetScore(targetScore);
+                stateController.setCurrentState(gameState);
+                layoutGUI();
+            });
+        }
     }
 
     public BuzzwordController getController() {
