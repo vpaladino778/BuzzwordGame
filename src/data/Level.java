@@ -93,14 +93,11 @@ public class Level {
                 actualScore += Level.calcWordScore(randWord);
             }
         }
-
         fillEmptySpace(grid);
         targetScore = actualScore;
         grid.findWords();
 
-
         BuzzGUI.stateController.getGameState().startLevel(); //Gets the level ready to start
-        actualScore = actualScore - Level.calcWordScore(randWord);
         return actualScore;
     }
 
@@ -145,7 +142,7 @@ public class Level {
     }
 
     public int getLevelID() {
-        return levelID;
+                return levelID;
     }
 
     public Button getLevelButton() {

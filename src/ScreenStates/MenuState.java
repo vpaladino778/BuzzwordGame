@@ -16,25 +16,25 @@ import javafx.scene.text.Text;
  */
 public class MenuState extends State {
 
+    private Button  helpButton;
     private Button  play;
     private Button  level;
-    private VBox    mainBox;
-    private BorderPane borderPane;
-    private Button createProfile;
-    private Button loginButton;
-    private Button exitButton;
-    private VBox toolbar;
-    private HBox outerBox;
-    private ChoiceBox gameModeBox;
+    private Button  createProfile;
+    private Button  loginButton;
+    private Button  exitButton;
 
-    private Button helpButton;
 
+    private VBox   mainBox;
+    private VBox   toolbar;
+
+    private HBox        outerBox;
+    private ChoiceBox   gameModeBox;
+    private BorderPane  borderPane;
 
     public MenuState(){
         super();
         layoutGUI();
     }
-
 
     public String getGameMode(){
         if(gameModeBox == null){
@@ -42,7 +42,6 @@ public class MenuState extends State {
         }else{
             return gameModeBox.getValue().toString();
         }
-
      }
     public void layoutGUI(){
         statePane = new Pane();
@@ -52,13 +51,14 @@ public class MenuState extends State {
         toolbar.getStyleClass().add("vbox");
         toolbar.setPrefHeight(600);
 
-        play = new Button("Start Game");
-        level = new Button("Levels");
+        play =          new Button("Start Game");
+        level =         new Button("Levels");
         createProfile = new Button("Create profile");
-        loginButton = new Button("Login");
-        exitButton = new Button("Exit");
-        helpButton = new Button("Help");
-        borderPane = new BorderPane();
+        loginButton =   new Button("Login");
+        exitButton =    new Button("Exit");
+        helpButton =    new Button("Help");
+        borderPane =    new BorderPane();
+
         gameModeBox = new ChoiceBox(FXCollections.observableArrayList("Words","People","Animals"));
         gameModeBox.setTooltip(new Tooltip("Select a gamemode"));
         gameModeBox.getSelectionModel().selectFirst();
@@ -74,8 +74,6 @@ public class MenuState extends State {
         BorderPane.setAlignment(heading,Pos.TOP_CENTER);
         outerBox.getChildren().addAll(toolbar,borderPane);
         statePane.getChildren().setAll(outerBox);
-
-
 
         stateScene = createScene(statePane);
     }

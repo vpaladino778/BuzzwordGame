@@ -83,8 +83,10 @@ public class BuzzGUI extends AppWorkspaceComponent {
             if(e.getCode().isLetterKey()){
                     System.out.println("Char " + e.getCode().toString());
                     gameState.getWordGrid().highlightLetter(Character.toUpperCase(e.getCode().toString().charAt(0)));
+                    BuzzGUI.stateController.getGameState().setSelectedLetters(gameState.getWordGrid().getSelectedWord());
             }else if(e.getCode() == KeyCode.ENTER){
                 System.out.println("Enter Pressed");
+                BuzzGUI.stateController.getGameState().setSelectedLetters(gameState.getWordGrid().getSelectedWord());
                 gameState.getWordGrid().finishWord();
 
             }else if(e.getCode() == KeyCode.DIGIT1){

@@ -30,7 +30,6 @@ public class WordGrid {
     private boolean gameOver;
 
     private ArrayList<LetterNode> selectedNodes;
-
     private ArrayList<LetterNode> actualNodes;
 
     public WordGrid(int w, int h, AppTemplate appTemplate) {
@@ -90,6 +89,7 @@ public class WordGrid {
         node.getButton().setOnDragEntered(e -> {
             if (!gameOver && isAdjacent(selectedNodes.get(selectedNodes.size() - 1).index, node.index) ) {
                 selectedNodes.add(node);
+                BuzzGUI.stateController.getGameState().setSelectedLetters(getSelectedWord());
                 highlightSelected(selectedNodes);
             }
         });
@@ -102,12 +102,15 @@ public class WordGrid {
             selectedNodes.clear();
             if(!gameOver)
                 selectedNodes.add(node);
+
+            BuzzGUI.stateController.getGameState().setSelectedLetters(getSelectedWord());
             e.consume();
         });
         node.getButton().setOnDragDone(e -> {
             System.out.println(getSelectedWord());
             if(!gameOver) {
                 highlightSelected(selectedNodes);
+                BuzzGUI.stateController.getGameState().setSelectedLetters(getSelectedWord());
                 //Selected word is a word and hasn't been guessed
                 if (correctWord(getSelectedWord())) {
                     //Check if the player won
@@ -236,7 +239,6 @@ public class WordGrid {
             }
         }
     }
-
 
     //Handles letter highlights
     public void highlightLetter(char a) {

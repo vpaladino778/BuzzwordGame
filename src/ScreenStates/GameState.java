@@ -19,7 +19,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
-import propertymanager.PropertyManager;
 import ui.AppGUI;
 import ui.AppMessageDialogSingleton;
 
@@ -45,6 +44,7 @@ public class GameState extends State{
     private boolean paused;
     private Text levelText;
     private WordGrid wordGrid;
+    private Text selectedLetters;
 
     private Text timeRemaining;
 
@@ -65,14 +65,11 @@ public class GameState extends State{
         wordGrid = new WordGrid(4,4, appTemplate);
         gui = appTemplate.getGUI();
         gameData = (GameData) appTemplate.getDataComponent();
-        //controller = (BuzzwordController) gui.getFileController();
         layoutGUI();
     }
 
     @Override
     public void layoutGUI() {
-        PropertyManager propertyManager = PropertyManager.getManager();
-
         pauseButton = new ToggleButton();
         gameInfo = new VBox();
         statePane = new Pane();
@@ -109,7 +106,6 @@ public class GameState extends State{
 
         table.getColumns().addAll(wordCol,scoreCol);
 
-
         Text heading = new Text("BuzzWord!");
         heading.getStyleClass().add("header-text");
 
@@ -120,11 +116,9 @@ public class GameState extends State{
         setTargetScore(targetScore);
         totalScore = new Text();
         setCurrentScore(currentScore);
-        Text selectedLetters = new Text("Bu");
-
+        selectedLetters = new Text();
 
         levelText = new Text();
-
 
         gameInfo.getChildren().addAll(levelText,timeRemaining,selectedLetters,table,totalScore,target);
 
@@ -199,21 +193,24 @@ public class GameState extends State{
         }
     }
 
-    public BuzzTimer getBuzzTimer(){ return buzzTimer; }
-    public ObservableList<Word> getGuesses(){
-        return correctGuesses;
-    }
-    public Button getHomeButton(){ return homeButton; }
-    public Button getExitButton(){ return exitButton; }
+
     public void setCurrentLevel(Level lvl){
         currentLevel = lvl;
         levelText.setText("Level: " + getCurrentLevel().getLevelID());
     }
-    public Level getCurrentLevel() { return currentLevel; }
-    public WordGrid getWordGrid(){return wordGrid;}
-    public ToggleButton getPauseButton(){ return pauseButton; }
-    public  boolean isPaused(){ return paused; }
+    public BuzzTimer getBuzzTimer(){        return buzzTimer; }
+    public Level getCurrentLevel() {        return currentLevel; }
+    public WordGrid getWordGrid(){          return wordGrid;}
+    public  boolean isPaused(){             return paused; }
 
-    public Button getReplayButton(){ return replayButton; }
-    public Button getNextButton(){ return nextButton; }
+    public ToggleButton getPauseButton(){   return pauseButton; }
+    public Button getReplayButton(){        return replayButton; }
+    public Button getNextButton(){          return nextButton; }
+    public Button getHomeButton(){          return homeButton; }
+    public Button getExitButton(){          return exitButton; }
+
+    public ObservableList<Word> getGuesses(){
+        return correctGuesses;
+    }
+    public void setSelectedLetters(String s){ selectedLetters.setText(s); }
 }

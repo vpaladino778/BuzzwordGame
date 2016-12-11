@@ -6,6 +6,7 @@ import data.Dictionary;
 import data.GameData;
 import data.Profile;
 import javafx.animation.Timeline;
+import ui.AppMessageDialogSingleton;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -40,14 +41,20 @@ public class BuzzwordController implements FileController{
         peopleDictionary = new Dictionary();
 
         try {
-            wordsDictionary.loadDictionary("resources/dictionary/words.txt");
-            wordsDictionary.setGamemode("words");
-            animalDictionary.loadDictionary("resources/dictionary/commonAnimals.txt");
-            animalDictionary.setGamemode("animals");
-            peopleDictionary.loadDictionary("resources/dictionary/commonNames.txt");
-            peopleDictionary.setGamemode("people");
+            wordsDictionary.loadDictionary  ("resources/dictionary/words.txt");
+            wordsDictionary.loadHashSet     ("resources/dictionary/words.txt");
+            wordsDictionary.setGamemode     ("words");
+
+            animalDictionary.loadDictionary ("resources/dictionary/commonAnimals.txt");
+            animalDictionary.loadHashSet    ("resources/dictionary/commonAnimals.txt");
+            animalDictionary.setGamemode    ("animals");
+
+            peopleDictionary.loadDictionary ("resources/dictionary/commonNames.txt");
+            peopleDictionary.loadHashSet    ("resources/dictionary/commonNames.txt");
+            peopleDictionary.setGamemode    ("people");
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            AppMessageDialogSingleton error = AppMessageDialogSingleton.getSingleton();
+            error.show("Error loading Dictionaries", e.toString());
         }
     }
 

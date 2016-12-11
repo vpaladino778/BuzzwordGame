@@ -103,7 +103,6 @@ public class AppGUI implements AppStyleArbiter {
      */
     private void initializeToolbar() throws IOException {
         toolbarPane = new FlowPane();
-
     }
 
     private void initializeToolbarHandlers(AppTemplate app) throws InstantiationException {
@@ -119,29 +118,6 @@ public class AppGUI implements AppStyleArbiter {
             System.exit(1);
         }
 
-       /* newButton.setOnAction(e -> fileController.handleNewRequest());
-        saveButton.setOnAction(e -> {
-            try {
-                fileController.handleSaveRequest();
-            } catch (IOException e1) {
-                e1.printStackTrace();
-                System.exit(1);
-            }
-        });
-        loadButton.setOnAction(e -> {
-            try {
-                fileController.handleLoadRequest();
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
-        });
-        exitButton.setOnAction(e -> fileController.handleExitRequest());*/
-    }
-
-    public void updateWorkspaceToolbar(boolean savable) {
-      /*  saveButton.setDisable(!savable);
-        newButton.setDisable(false);
-        exitButton.setDisable(false);*/
     }
 
     private void initializeWindow() throws IOException {
