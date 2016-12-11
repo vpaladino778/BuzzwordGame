@@ -1,12 +1,12 @@
 package data;
 
+import Display.BuzzGUI;
 import Display.ProfileSingleton;
 import apptemplate.AppTemplate;
 import components.AppDataComponent;
 import ui.AppMessageDialogSingleton;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -84,6 +84,7 @@ public class GameData implements AppDataComponent{
                 //Login information is correct
                 loggedIn = p;
                 updateLevels(p);
+                updateCompleted();
                 dialogSingleton.show("Login was successfull",username + " has been logged in successfully!");
                 return true;
             }
@@ -158,9 +159,13 @@ public class GameData implements AppDataComponent{
     //Checks if any levels are completed, if they are unlocks the next level
     public void updateCompleted(){
         for(int i = 0; i < wordLevels.size() - 1; i++){
+            if(wordLevels.get(i) == BuzzGUI.stateController.getGameState().getCurrentLevel()){
+                System.out.println("Level " + i + "Is the same as current level");
+            }
             if(wordLevels.get(i).checkCompletion()){
-                wordLevels.get(i + 1 ).setUnlocked(true);
+                wordLevels.get(i + 1).setUnlocked(true);
                 wordLevels.get(i+1).updateDisabled();
+                wordLevels.get(i).updateDisabled();
             }
         }
     }

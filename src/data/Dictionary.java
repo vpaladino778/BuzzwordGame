@@ -2,10 +2,8 @@ package data;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Random;
 import java.util.Scanner;
 
 /**
@@ -62,19 +60,16 @@ public class Dictionary {
 
     //Gets random word within an arraylist
     public static String getRandomWord(ArrayList<String> set){
-        int rand = new Random().nextInt(set.size());
+        int rand = (int) (Math.random() * (set.size() -1));
         return set.get(rand);
     }
 
     //Returns a random word within the specified listNum, the higher the number, the harder the word
     public String getRandomWord(ArrayList<String> set, int minLength, int maxLength){
 
-        if(minLength > maxLength){
-            throw new InvalidParameterException();
-        }
         String randWord = getRandomWord(set);
 
-        while(randWord.length() < minLength || randWord.length() > maxLength){
+        while(randWord.length() > maxLength){
             randWord = getRandomWord(set);
         }
 

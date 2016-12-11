@@ -14,7 +14,7 @@ public class StateController {
 
     public StateController(AppTemplate appTemplate){
         menuState = new MenuState();
-        levelState = new LevelState();
+        levelState = new LevelState(appTemplate);
         gameState = new GameState(appTemplate);
         setCurrentState(menuState);
     }

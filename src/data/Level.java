@@ -54,7 +54,7 @@ public class Level {
     public boolean updateDisabled() {
         if (isUnlocked) {
             levelButton.setDisable(false);
-        } else if (!isUnlocked) {
+        } else{
             levelButton.setDisable(true);
         }
         return isUnlocked;
@@ -68,27 +68,25 @@ public class Level {
             currentDictionary = BuzzwordController.animalDictionary;
         } else if (g.equalsIgnoreCase("people")) {
             currentDictionary = BuzzwordController.peopleDictionary;
+        }else{
+            currentDictionary = BuzzwordController.wordsDictionary;
         }
     }
 
     //Generates level as close to the target score
     public int generateLevel(WordGrid grid) {
+        grid.setGameOver(false);
         grid.clearLetters(grid.getActualNodes());
         int actualScore = 0;
-        int minLength = maxWordLength;
+        int minLength = 3;
         int maxLength = maxWordLength;
         actualScore = 0;
-
+        gamemode = LevelState.gamemode;
         checkDictionary(gamemode);
         for (int i = 0; i < levelDifficulty; i++) {
             String randWord = currentDictionary.getRandomWord(currentDictionary.getWordList(), minLength, maxLength);
             if (grid.insertWord(randWord)) {
                 actualScore += Level.calcWordScore(randWord);
-                levelDifficulty--;
-                if (minLength > 3 && maxLength > 3) {
-                    minLength--;
-                    maxLength--;
-                }
             }
         }
 

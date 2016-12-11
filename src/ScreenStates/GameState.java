@@ -4,6 +4,7 @@ import Display.WordGrid;
 import apptemplate.AppTemplate;
 import controller.BuzzwordController;
 import data.BuzzTimer;
+import data.GameData;
 import data.Level;
 import data.Word;
 import javafx.beans.binding.Bindings;
@@ -20,6 +21,7 @@ import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import propertymanager.PropertyManager;
 import ui.AppGUI;
+import ui.AppMessageDialogSingleton;
 
 import java.util.ArrayList;
 
@@ -49,14 +51,18 @@ public class GameState extends State{
     private BuzzwordController controller;
     private AppGUI gui;
 
+    private BuzzTimer buzzTimer;
+
+    private GameData gameData;
+
     public GameState(AppTemplate appTemplate){
         super();
         currentScore = 0;
         targetScore = 0;
         wordGrid = new WordGrid(4,4, appTemplate);
         gui = appTemplate.getGUI();
+        gameData = (GameData) appTemplate.getDataComponent();
         //controller = (BuzzwordController) gui.getFileController();
-        currentLevel = new Level(0,0);
         layoutGUI();
     }
 
@@ -103,6 +109,7 @@ public class GameState extends State{
         heading.getStyleClass().add("header-text");
 
         timeRemaining = new Text();
+        buzzTimer = new BuzzTimer(timeRemaining, this); //Setup Timer
         timeRemaining.getStyleClass().addAll("timer");
         target = new Text();
         setTargetScore(targetScore);
@@ -112,7 +119,7 @@ public class GameState extends State{
 
 
         levelText = new Text();
-        setCurrentLevel(currentLevel);
+
 
         gameInfo.getChildren().addAll(levelText,timeRemaining,selectedLetters,table,totalScore,target);
 
@@ -135,11 +142,23 @@ public class GameState extends State{
     }
 
     public void startLevel(){
-        BuzzTimer timer = new BuzzTimer(timeRemaining);
-        timer.startTimer();
+        setCurrentLevel(currentLevel);
+        buzzTimer.startTimer();
         setCurrentScore(0);
         unPauseGame();
         correctGuesses.clear();
+    }
+
+    //Called when the timer ends
+    public void gameOver(){
+        AppMessageDialogSingleton singleton = AppMessageDialogSingleton.getSingleton();
+        ArrayList<String> words = wordGrid.findWords();
+        wordGrid.setGameOver(true);
+        StringBuilder builder = new StringBuilder();
+        for(String s: words){
+            builder.append(s + "\n");
+        }
+        singleton.show("Game Over!", builder.toString());
     }
 
     public void setCurrentScore(int score){
@@ -159,10 +178,12 @@ public class GameState extends State{
 
     public void pauseGame(){
         paused = true;
+        buzzTimer.setPaused(paused);
         wordGrid.getNodeGrid().setVisible(false);
     }
     public void unPauseGame(){
         paused = false;
+        buzzTimer.setPaused(paused);
         wordGrid.getNodeGrid().setVisible(true);
     }
 
@@ -173,6 +194,7 @@ public class GameState extends State{
         }
     }
 
+    public BuzzTimer getBuzzTimer(){ return buzzTimer; }
     public ObservableList<Word> getGuesses(){
         return correctGuesses;
     }

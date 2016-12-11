@@ -6,7 +6,6 @@ import data.Dictionary;
 import data.GameData;
 import data.Profile;
 import javafx.animation.Timeline;
-import javafx.scene.text.Text;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -52,10 +51,6 @@ public class BuzzwordController implements FileController{
         }
     }
 
-    public void startTimer(Text timerLabel){
-
-
-    }
 
     public StateController getStateController(){ return stateController; }
 

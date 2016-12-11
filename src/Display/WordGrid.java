@@ -4,6 +4,7 @@ import apptemplate.AppTemplate;
 import controller.BuzzwordController;
 import data.GameData;
 import data.Level;
+import data.Profile;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
@@ -26,6 +27,8 @@ public class WordGrid {
     private AppGUI gui;
     private BuzzwordController controller;
 
+    private boolean gameOver;
+
     private ArrayList<LetterNode> selectedNodes;
 
     private ArrayList<LetterNode> actualNodes;
@@ -33,6 +36,7 @@ public class WordGrid {
     public WordGrid(int w, int h, AppTemplate appTemplate) {
         gridHeight = h;
         gridWidth = w;
+        gameOver = false;
         this.appTemplate = appTemplate;
         nodeGrid = new GridPane();
         actualNodes = new ArrayList<LetterNode>();
@@ -51,12 +55,13 @@ public class WordGrid {
 
 
     //Prints all words present in the grid
-    public void checkWord(ArrayList<Boolean> visited, int i, String word) {
+    public void checkWord(ArrayList<Boolean> visited, int i, String word, ArrayList<String> words) {
 
         visited.set(i, true);
         word = word + actualNodes.get(i).getLetter();
 
         if (Level.currentDictionary.isWord(word)) {
+            words.add(word);
             System.out.println(word);
         }
         int right = getRight(i);
@@ -64,16 +69,16 @@ public class WordGrid {
         int above = getAbove(i);
         int below = getBelow(i);
         if (right != -1 && !visited.get(right)) {
-            checkWord(visited, right, word);
+            checkWord(visited, right, word, words);
         }
         if (left != -1 && !visited.get(left)) {
-            checkWord(visited, left, word);
+            checkWord(visited, left, word, words);
         }
         if (above != -1 && !visited.get(above)) {
-            checkWord(visited, above, word);
+            checkWord(visited, above, word, words);
         }
         if (below != -1 && !visited.get(below)) {
-            checkWord(visited, below, word);
+            checkWord(visited, below, word, words);
         }
 
         word = word.substring(0, word.length() - 1);
@@ -83,7 +88,7 @@ public class WordGrid {
 
     public void setupNodeHandlers(LetterNode node) {
         node.getButton().setOnDragEntered(e -> {
-            if (isAdjacent(selectedNodes.get(selectedNodes.size() - 1).index, node.index)) {
+            if (!gameOver && isAdjacent(selectedNodes.get(selectedNodes.size() - 1).index, node.index) ) {
                 selectedNodes.add(node);
                 highlightSelected(selectedNodes);
             }
@@ -95,17 +100,20 @@ public class WordGrid {
             db.setContent(content);
             resetNodeStyle(selectedNodes);
             selectedNodes.clear();
-            selectedNodes.add(node);
+            if(!gameOver)
+                selectedNodes.add(node);
             e.consume();
         });
         node.getButton().setOnDragDone(e -> {
             System.out.println(getSelectedWord());
-            highlightSelected(selectedNodes);
-            //Selected word is a word and hasn't been guessed
-            if (correctWord(getSelectedWord())) {
-                //Check if the player won
-                if (BuzzGUI.stateController.getGameState().getCurrentLevel().checkCompletion(gameData.getCurrentScore()))
-                    winGame();
+            if(!gameOver) {
+                highlightSelected(selectedNodes);
+                //Selected word is a word and hasn't been guessed
+                if (correctWord(getSelectedWord())) {
+                    //Check if the player won
+                    if (BuzzGUI.stateController.getGameState().getCurrentLevel().checkCompletion(gameData.getCurrentScore()))
+                        winGame();
+                }
             }
             resetNodeStyle(selectedNodes);
         });
@@ -115,15 +123,30 @@ public class WordGrid {
         System.out.println("You Won!"); //Stop timer, Dispay message, unlock next level
         AppMessageDialogSingleton dialog = AppMessageDialogSingleton.getSingleton();
         gameData.updateCompleted();
-        dialog.show("Congratulations!", "You Won!");
+        BuzzGUI.stateController.getGameState().getCurrentLevel().updateDisabled();
         gameData.getGuessedWords().clear();
-        if (Level.currentDictionary.getGamemode().equalsIgnoreCase("words") && gameData.getLoggedIn() != null) {
-            gameData.getLoggedIn().getWordLevelsCompleted().add(BuzzGUI.stateController.getGameState().getCurrentLevel());
+        if(gameData.getLoggedIn() != null) {
+            if (Level.currentDictionary.getGamemode().equalsIgnoreCase("words")) {
+                gameData.getLoggedIn().addToList(gameData.getLoggedIn().getWordLevelsCompleted(), BuzzGUI.stateController.getGameState().getCurrentLevel());
+            } else if (Level.currentDictionary.getGamemode().equalsIgnoreCase("people")) {
+                gameData.getLoggedIn().addToList(gameData.getLoggedIn().getPeopleLevelsCompleted(), BuzzGUI.stateController.getGameState().getCurrentLevel());
+            } else if (Level.currentDictionary.getGamemode().equalsIgnoreCase("animals")) {
+                gameData.getLoggedIn().addToList(gameData.getLoggedIn().getAnimalLevelsCompleted(), BuzzGUI.stateController.getGameState().getCurrentLevel());
+            }
+        }
+        Profile loggedIn = gameData.getLoggedIn();
+        if(loggedIn != null){
+            if(loggedIn.setHighScore(gameData.getCurrentScore())){
+                AppMessageDialogSingleton singleton = AppMessageDialogSingleton.getSingleton();
+                singleton.show("New High Score!", "You have earned a new high score of " + gameData.getCurrentScore() + "! Congratulations!");
+            }
         }
         gameData.setCurrentScore(0);
         BuzzGUI.stateController.getGameState().getGuesses().clear();
+        BuzzGUI.stateController.getGameState().getBuzzTimer().getTimeline().stop();
         resetNodeStyle(selectedNodes);
         gameData.updateLoggedIn();
+        dialog.show("Congratulations!", "You Won!");
     }
 
     //Checks if the word is valid, then checks if it has already been guesses
@@ -156,22 +179,24 @@ public class WordGrid {
         }
     }
 
-    public void findWords() {
+    //Grid solver
+    public ArrayList<String> findWords() {
         ArrayList<Boolean> visted = new ArrayList<>();
+        ArrayList<String> words = new ArrayList<>();
         for (int i = 0; i < actualNodes.size(); i++) {
             visted.add(false);
         }
         String word = "";
         System.out.println("Words within the grid:");
         for (int j = 0; j < actualNodes.size(); j++) {
-            checkWord(visted, j, word);
+            checkWord(visted, j, word, words);
         }
+        return words;
     }
 
     public String getSelectedWord() {
         StringBuilder string = new StringBuilder();
         for (LetterNode node : selectedNodes) {
-            //if (node.isSelected())
                 string.append(node.getLetter());
         }
         return string.toString();
@@ -181,6 +206,15 @@ public class WordGrid {
     public boolean isAdjacent(int index, int ajd) {
         if (getRight(index) == ajd || getLeft(index) == ajd || getAbove(index) == ajd || getBelow(index) == ajd) {
             return true;
+        }
+        return false;
+    }
+
+    public boolean checkSelected(LetterNode n){
+        for (LetterNode node: selectedNodes){
+            if(n.index == node.index){
+                return true;
+            }
         }
         return false;
     }
@@ -206,31 +240,33 @@ public class WordGrid {
         if (selectedNodes.isEmpty()) {
             LetterNode n = null;
             for (LetterNode node : actualNodes) {
-                if (Character.toUpperCase(node.getLetter()) == Character.toUpperCase(a)) {
+                if (Character.toUpperCase(node.getLetter()) == Character.toUpperCase(a) && !gameOver) {
                     n = node;
                     node.setSelected(true);
                     highlightSelected(node);
                 }
             }
-            if (n != null) {
+            if (n != null && !checkSelected(n) && !gameOver) {
                 selectedNodes.add(n);
-            } else {
-                if (selectedNodes.size() <= 2) {
+            }
+        }else {
+                if (selectedNodes.size() <= 2 && !gameOver) {
                     LetterNode node = highlightAjd(selectedNodes.get(selectedNodes.size() - 1).getLetter(), a);
-                    if (node != null) {
+                    if (node != null && !checkSelected(node)) {
                         node.setSelected(true);
                         selectedNodes.add(node);
                     }
                 } else {
-                    LetterNode node = highlightAjd(selectedNodes.get(selectedNodes.size() - 1), a);
-                    if (node != null) {
-                        node.setSelected(true);
-                        selectedNodes.add(node);
+                    if(!gameOver) {
+                        LetterNode node = highlightAjd(selectedNodes.get(selectedNodes.size() - 1), a);
+                        if (node != null && !checkSelected(node)) {
+                            node.setSelected(true);
+                            selectedNodes.add(node);
+                        }
                     }
                 }
             }
         }
-    }
 
     //Highlights a character around a specific node
     public LetterNode highlightAjd(LetterNode node, char adj) {
@@ -238,22 +274,22 @@ public class WordGrid {
         boolean found = false;
         adj = Character.toUpperCase(adj);
             //Check surrounding nodes to see if they are ajd
-            if (getAbove(i) != -1 && actualNodes.get(getAbove(i)).getLetter() == adj) {
+            if (getAbove(i) != -1 && actualNodes.get(getAbove(i)).getLetter() == adj && !gameOver) {
                 node = actualNodes.get(getAbove(i));
                 highlightSelected(actualNodes.get(getAbove(i)));
 
             }
-            if (getBelow(i) != -1 && actualNodes.get(getBelow(i)).getLetter() == adj) {
+            if (getBelow(i) != -1 && actualNodes.get(getBelow(i)).getLetter() == adj && !gameOver) {
                 node = actualNodes.get(getBelow(i));
                 highlightSelected(actualNodes.get(getBelow(i)));
 
             }
-            if (getLeft(i) != -1 && actualNodes.get(getLeft(i)).getLetter() == adj) {
+            if (getLeft(i) != -1 && actualNodes.get(getLeft(i)).getLetter() == adj && !gameOver) {
                 node = actualNodes.get(getLeft(i));
                 highlightSelected(actualNodes.get(getLeft(i)));
 
             }
-            if (getRight(i) != -1 && actualNodes.get(getRight(i)).getLetter() == adj) {
+            if (getRight(i) != -1 && actualNodes.get(getRight(i)).getLetter() == adj && !gameOver) {
                 node = actualNodes.get(getRight(i));
                 highlightSelected(actualNodes.get(getRight(i)));
             }
@@ -267,7 +303,7 @@ public class WordGrid {
         boolean found = false;
         adj = Character.toUpperCase(adj);
         for (int i = 0; i < actualNodes.size(); i++) {
-            if (actualNodes.get(i).getLetter() == c) {
+            if (actualNodes.get(i).getLetter() == c && !gameOver) {
                 //Check surrounding nodes to see if they are ajd
                 if (getAbove(i) != -1 && actualNodes.get(getAbove(i)).getLetter() == adj) {
                     node = actualNodes.get(getAbove(i));
@@ -344,6 +380,7 @@ public class WordGrid {
      */
     //Return false if it cannot insert the word
     public boolean insertWord(String word) {
+        ArrayList<LetterNode> nearbyNodes;
         int start;
         //Avoids directly modifying list incase insertion fails
         ArrayList<LetterNode> newList = new ArrayList<LetterNode>();
@@ -352,16 +389,19 @@ public class WordGrid {
             newList.add(new LetterNode(actualNodes.get(j).getLetter()));
         }
 
+
         if ((start = randomEmptyIndex(newList)) != -1) {
-            ArrayList<LetterNode> nearbyNodes;
             int randInt = 0;
             newList.get(start).setLetter(Character.toUpperCase(word.charAt(0)));
             for (int i = 1; i < word.length(); i++) {
                 nearbyNodes = nearbyNodes(gridHeight, gridWidth, newList, start);
-                if (nearbyNodes.size() <= 0) {
+                if (nearbyNodes.isEmpty()) {
                     return false;
                 }
                 LetterNode next = null;
+                if(nearbyNodes.get(0) == null && nearbyNodes.get(1) == null && nearbyNodes.get(2) == null && nearbyNodes.get(3) == null){
+                    return false;
+                }
                 while (next == null) { //Select random nearby
                     randInt = (int) (Math.random() * (nearbyNodes.size()));
                     next = nearbyNodes.get(randInt);
@@ -442,8 +482,17 @@ public class WordGrid {
         } else {
             nearby.add(null);
         }
+
+        if(nearby.get(0) == null && nearby.get(1) == null && nearby.get(2) == null && nearby.get(3) == null){
+            nearby.clear();
+        }
         return nearby;
     }
+
+
+    public boolean isGameOver(){ return gameOver; }
+
+    public void setGameOver(boolean g){ gameOver = g; }
 
     public int getGridWidth() {
         return gridWidth;

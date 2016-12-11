@@ -1,7 +1,6 @@
 package data;
 
 import components.AppDataComponent;
-import components.AppFileComponent;
 
 import java.math.BigInteger;
 import java.security.MessageDigest;
@@ -54,6 +53,16 @@ public class Profile implements AppDataComponent{
         return false;
     }
 
+    //Checks if level is alread in list, if it is, it doenst add it
+    public void addToList(ArrayList<Level> list, Level l){
+        for(Level level: list){
+            if(l.getLevelID() == level.getLevelID()){
+            return;
+            }
+        }
+        list.add(l);
+    }
+
     public ArrayList<Level> getWordLevelsCompleted() {
         return wordLevelsCompleted;
     }
@@ -90,10 +99,12 @@ public class Profile implements AppDataComponent{
         return highScore;
     }
 
-    public void setHighScore(int h) {
+    public boolean setHighScore(int h) {
         if(h > highScore){
             highScore = h;
+            return true;
         }
+        return false;
     }
 
     public String getPassword(){ return password; }

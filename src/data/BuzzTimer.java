@@ -1,7 +1,9 @@
 package data;
 
+import ScreenStates.GameState;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 
@@ -15,18 +17,23 @@ public class BuzzTimer {
     private Integer timeSeconds;
 
     private boolean isPaused;
+    private boolean gameover;
 
     private Timeline timeline;
     private Text timerLabel;
+    private GameState gameState;
 
-    public BuzzTimer(Text text){
+    public BuzzTimer(Text text, GameState gameState){
         timerLabel = text;
+        this.gameState = gameState;
+        gameover = false;
         isPaused = false;
     }
     public void startTimer(){
 
         if (timeline != null)
             timeline.stop();
+
         timeSeconds = STARTTIME;
         timerLabel.setText(timeSeconds.toString());  // updating the timer label every second
         timeline = new Timeline();                   // setting up the timeline
@@ -43,12 +50,25 @@ public class BuzzTimer {
                             if (timeSeconds <= 0) {
                                 synchronized (mutex) {
                                     timeline.stop();
+                                    gameover = true;
+                                    Platform.runLater(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            gameState.gameOver();
+                                        }
+                                    });
                                     // e.g., add code to disable entering new words
+
                                 }
                             }
                         }));
         timeline.playFromStart();
     }
 
+    public Timeline getTimeline(){ return timeline;}
+
     public boolean isPaused(){ return isPaused; }
+    public boolean isGameover(){ return gameover;}
+    public void setGameover(boolean g){ gameover = g; }
+    public void setPaused(boolean p){ isPaused = p; }
 }

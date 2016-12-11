@@ -109,7 +109,7 @@ public class GameDataFile implements AppFileComponent{
                             Level l = new Level(jsonParser.getIntValue(),7);
                             l.setUnlocked(true);
                             l.checkCompletion(9999999);
-                            gameData.getWordLevelsCompleted().add(l);
+                            gameData.addToList(gameData.getWordLevelsCompleted(),l);
                         }
                         break;
                     case ANIMAL_LEVELS:
@@ -118,7 +118,7 @@ public class GameDataFile implements AppFileComponent{
                             Level l = new Level(jsonParser.getIntValue(),7);
                             l.setUnlocked(true);
                             l.checkCompletion(9999999);
-                            gameData.getAnimalLevelsCompleted().add(l);
+                            gameData.addToList(gameData.getAnimalLevelsCompleted(),l);
                         }
                         break;
                     case PEOPLE_LEVELS:
@@ -127,7 +127,7 @@ public class GameDataFile implements AppFileComponent{
                             Level l = new Level(jsonParser.getIntValue(),7);
                             l.setUnlocked(true);
                             l.checkCompletion(9999999);
-                            gameData.getPeopleLevelsCompleted().add(l);
+                            gameData.addToList(gameData.getPeopleLevelsCompleted(),l);
                         }
                         break;
                     default:

@@ -1,5 +1,7 @@
 package ScreenStates;
 
+import apptemplate.AppTemplate;
+import data.GameData;
 import data.Level;
 import javafx.scene.control.Button;
 import javafx.scene.layout.*;
@@ -21,43 +23,28 @@ public class LevelState extends State{
     private Text gamemodeText;
     private FlowPane flowPane;
     private Button profileButton;
+    private GameData gameData;
+    private AppTemplate appTemplate;
 
     //Gamemode Levels
     private ArrayList<Level> wordLevels;
     private ArrayList<Level> peopleLevels;
     private ArrayList<Level> animalLevels;
 
-    public LevelState(){
+    public LevelState(AppTemplate appTemplate){
         super();
+        this.appTemplate = appTemplate;
+        gameData  = (GameData) appTemplate.getDataComponent();
         gamemode = "Words";
-        populateLevels();
         layoutGUI();
 
+        wordLevels = gameData.getWordLevels();
+        peopleLevels = gameData.getPeopleLevels();
+        animalLevels = gameData.getAnimalLevels();
+
     }
 
-    private void populateLevels(){
-        wordLevels = new ArrayList<Level>();
-        peopleLevels = new ArrayList<Level>();
-        animalLevels = new ArrayList<Level>();
 
-
-        wordLevels.add( new Level(1,4));
-        wordLevels.add( new Level(2,5));
-        wordLevels.add( new Level(3,6));
-        wordLevels.add( new Level(4,6));
-        wordLevels.add( new Level(5,6));
-
-        peopleLevels.add( new Level(1,4));
-        peopleLevels.add( new Level(2,5));
-        peopleLevels.add( new Level(3,6));
-        peopleLevels.add( new Level(4,6));
-
-        animalLevels.add( new Level(1,4));
-        animalLevels.add( new Level(2,5));
-        animalLevels.add( new Level(3,6));
-        animalLevels.add( new Level(4,6));
-        animalLevels.add( new Level(5,6));
-    }
     public void displayLevel(ArrayList<Level> levels, FlowPane flow){
         flow.getChildren().setAll(levels.get(0).getLevelButton());
         for(int i = 1;  i < levels.size(); i++){
@@ -118,15 +105,5 @@ public class LevelState extends State{
     }
     public Button getProfileButton(){ return profileButton; }
 
-    public ArrayList<Level> getWordLevels() {
-        return wordLevels;
-    }
 
-    public ArrayList<Level> getPeopleLevels() {
-        return peopleLevels;
-    }
-
-    public ArrayList<Level> getAnimalLevels() {
-        return animalLevels;
-    }
 }

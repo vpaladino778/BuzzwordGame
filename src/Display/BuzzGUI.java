@@ -1,6 +1,9 @@
 package Display;
 
-import ScreenStates.*;
+import ScreenStates.GameState;
+import ScreenStates.LevelState;
+import ScreenStates.MenuState;
+import ScreenStates.StateController;
 import apptemplate.AppTemplate;
 import components.AppWorkspaceComponent;
 import controller.BuzzwordController;
@@ -8,7 +11,6 @@ import data.GameData;
 import data.Level;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
 import javafx.util.Pair;
 import ui.AppGUI;
@@ -27,9 +29,6 @@ public class BuzzGUI extends AppWorkspaceComponent {
     private GameData gameData;
     private BuzzwordController controller;
     public static StateController stateController;
-
-
-
 
     //GUI components
     private VBox toolBar;
@@ -92,7 +91,7 @@ public class BuzzGUI extends AppWorkspaceComponent {
                 }
         );
         //Level button Handlers
-        ArrayList<Level> wordLevels = levelState.getWordLevels();
+        ArrayList<Level> wordLevels = gameData.getWordLevels();
         for (Level level : wordLevels) {
             level.getLevelButton().setOnAction(e -> {
                 gameState.setCurrentLevel(level);
