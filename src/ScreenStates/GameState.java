@@ -55,6 +55,9 @@ public class GameState extends State{
 
     private GameData gameData;
 
+    private Button replayButton;    //Replay the level
+    private Button nextButton;      //Proceed to next level
+
     public GameState(AppTemplate appTemplate){
         super();
         currentScore = 0;
@@ -84,6 +87,8 @@ public class GameState extends State{
         homeButton = new Button();
         homeButton.setText("Home");
 
+        replayButton = new Button("Replay");
+        nextButton = new Button("Next Level");
 
         Image playImage = new Image("images/play.png");
         Image pauseImage = new Image("images/pause.png");
@@ -123,7 +128,7 @@ public class GameState extends State{
 
         gameInfo.getChildren().addAll(levelText,timeRemaining,selectedLetters,table,totalScore,target);
 
-        toolbar.getChildren().setAll(homeButton,pauseButton,exitButton);
+        toolbar.getChildren().setAll(homeButton,pauseButton,exitButton,replayButton,nextButton);
 
         AnchorPane headPane = new AnchorPane();
         headPane.getChildren().addAll(heading);
@@ -208,4 +213,7 @@ public class GameState extends State{
     public WordGrid getWordGrid(){return wordGrid;}
     public ToggleButton getPauseButton(){ return pauseButton; }
     public  boolean isPaused(){ return paused; }
+
+    public Button getReplayButton(){ return replayButton; }
+    public Button getNextButton(){ return nextButton; }
 }

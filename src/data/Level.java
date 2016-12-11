@@ -134,6 +134,11 @@ public class Level {
     }
 
 
+    public String getGamemode(){
+        if(gamemode == null){
+            gamemode = "words";
+        }
+        return gamemode; }
 
     public void setTargetScore(int t){
         targetScore = t;
