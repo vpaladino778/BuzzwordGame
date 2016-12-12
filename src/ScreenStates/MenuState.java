@@ -67,7 +67,7 @@ public class MenuState extends State {
         Text heading = new Text("BuzzWord!");
         heading.getStyleClass().add("header-text");
         Text text = new Text("Select a game mode:");
-        toolbar.getChildren().setAll(play,level,text,gameModeBox,createProfile,loginButton, helpButton, exitButton);
+        toolbar.getChildren().setAll(level,text,gameModeBox,createProfile,loginButton, helpButton, exitButton);
         mainBox.setSpacing(10);
         borderPane.setTop(heading);
         borderPane.setCenter(mainBox);
