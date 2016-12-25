@@ -53,7 +53,13 @@ public class WordGrid {
     }
 
 
-    //Prints all words present in the grid
+    /**
+     * Recursive function that checks if a word exists within the grid
+     * @param visited A boolean array representing the which nodes were visted by the function
+     * @param i The starting point to search for the word
+     * @param word The word that needs to be checked
+     * @param words The arraylist to add the word if it is found
+     */
     public void checkWord(ArrayList<Boolean> visited, int i, String word, ArrayList<String> words) {
 
         visited.set(i, true);
@@ -84,6 +90,23 @@ public class WordGrid {
         visited.set(i, false);
     }
 
+    /**
+     * Cycles through the currentDictionary object and checks if it is in the grid
+     * @return 
+     */
+    public ArrayList<String> findWords() {
+        ArrayList<Boolean> visted = new ArrayList<>();
+        ArrayList<String> words = new ArrayList<>();
+        for (int i = 0; i < actualNodes.size(); i++) {
+            visted.add(false);
+        }
+        String word = "";
+        System.out.println("Words within the grid:");
+        for (int j = 0; j < actualNodes.size(); j++) {
+            checkWord(visted, j, word, words);
+        }
+        return words;
+    }
 
     public void setupNodeHandlers(LetterNode node) {
         node.getButton().setOnDragEntered(e -> {
@@ -185,20 +208,7 @@ public class WordGrid {
         }
     }
 
-    //Grid solver
-    public ArrayList<String> findWords() {
-        ArrayList<Boolean> visted = new ArrayList<>();
-        ArrayList<String> words = new ArrayList<>();
-        for (int i = 0; i < actualNodes.size(); i++) {
-            visted.add(false);
-        }
-        String word = "";
-        System.out.println("Words within the grid:");
-        for (int j = 0; j < actualNodes.size(); j++) {
-            checkWord(visted, j, word, words);
-        }
-        return words;
-    }
+
 
     public String getSelectedWord() {
         StringBuilder string = new StringBuilder();

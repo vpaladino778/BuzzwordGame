@@ -30,7 +30,10 @@ public class Dictionary {
             return wordList.contains(word.trim().toUpperCase());
         }
     }
-    //Loads dictionary at location returns false if the file is not found
+    /**
+     *Loads dictionary text file into an ArrayList
+     * @param dictionary The String path to the dictionary text file
+     */
     public void loadDictionary(String dictionary) throws FileNotFoundException {
         Scanner dict = null;
         File dictFile = new File(dictionary);
@@ -43,7 +46,10 @@ public class Dictionary {
         }
 
     }
-    //Loads dictionary at location returns false if the file is not found
+    /**
+     * Loads dictionary text file into a HashMap
+     * @param dictionary The String path to the dictionary text file
+     */
     public void loadHashSet(String dictionary) throws FileNotFoundException {
         Scanner dict = null;
         File dictFile = new File(dictionary);
@@ -56,9 +62,11 @@ public class Dictionary {
         }
     }
 
-
-
-    //Gets random word within an arraylist
+    /**
+     * Retrieves a random word from an ArrayList
+     * @param set The ArrayList that you want to retrieve a random word from
+     * @return String Random object from ArrayList set
+     */
     public static String getRandomWord(ArrayList<String> set){
         int rand = (int) (Math.random() * (set.size() -1));
         return set.get(rand);
