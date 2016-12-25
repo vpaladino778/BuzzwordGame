@@ -17,7 +17,7 @@ import settings.InitializationParameters;
  * events occur. Note that it always provides the same controls, a label
  * with a message, and a single ok button.
  *
- * @author Richard McKenna, Ritwik Banerjee
+ * @author Vincent Paladino Richard McKenna, Ritwik Banerjee
  * @author ?
  * @version 1.0
  */

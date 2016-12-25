@@ -20,7 +20,7 @@ import static settings.AppPropertyType.*;
 import static settings.InitializationParameters.*;
 
 /**
- * @author Ritwik Banerjee
+ * @author Vincent Paladino and Ritwik Banerjee
  */
 public abstract class AppTemplate extends Application {
 

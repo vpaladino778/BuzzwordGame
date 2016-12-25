@@ -11,7 +11,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 /**
- * Created by Vincent on 12/11/2016.
+ * @author Vincent Paladino.
  */
 public class HelpBoxSingleton extends Stage{
 

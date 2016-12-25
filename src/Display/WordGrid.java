@@ -92,7 +92,8 @@ public class WordGrid {
 
     /**
      * Cycles through the currentDictionary object and checks if it is in the grid
-     * @return 
+     * @return  ArrayList List of strings that contains the words
+     *          that were discovered within the grid.
      */
     public ArrayList<String> findWords() {
         ArrayList<Boolean> visted = new ArrayList<>();
@@ -145,6 +146,9 @@ public class WordGrid {
         });
     }
 
+    /**
+     * Does everything required when the player wins the game.
+     */
     public void winGame() {
         System.out.println("You Won!"); //Stop timer, Dispay message, unlock next level
         AppMessageDialogSingleton dialog = AppMessageDialogSingleton.getSingleton();
@@ -178,7 +182,12 @@ public class WordGrid {
         dialog.show("Congratulations!", "You Won!");
     }
 
-    //Checks if the word is valid, then checks if it has already been guesses
+    /**
+     * Checks if the word is valid, then checks if it has already been guessed
+     * @param word Word that needs to be checked
+     * @return A boolean that specifies True, if the word was a correct guess. Returns false if an incorrect guess.
+     * @see data.Dictionary
+     */
     public boolean correctWord(String word) {
         if (Level.currentDictionary.isWord(word) && !gameData.getGuessedWords().contains(word)) {
             gameData.setCurrentScore(gameData.getCurrentScore() + Level.calcWordScore(getSelectedWord()));
@@ -283,7 +292,12 @@ public class WordGrid {
             }
         }
 
-    //Highlights a character around a specific node
+    /**
+     * Highlights all of the nodes adjacent to node that have contain the ajd char
+     * @param node The LetterNode that has surrounding nodes to be checked
+     * @param adj The letter that needs to be checked
+     * @return Returns the node that was found
+     */
     public LetterNode highlightAjd(LetterNode node, char adj) {
         int i = node.index;
         boolean found = false;
@@ -311,7 +325,14 @@ public class WordGrid {
         return node;
     }
 
-    //Finds nodes with character c, and highlights the surrounding nodes with ajd
+    /**
+     * Finds charcter c within the grid and highlights the surrounding nodes
+     * that contain character ajd.
+     * @param c The node which we check the surroundings of.
+     * @param adj The character we search for surroudning c
+     * @return The node that we find
+     * @see LetterNode
+     */
     public LetterNode highlightAjd(char c, char adj) {
         c = Character.toUpperCase(c);
         LetterNode node = null;
@@ -344,7 +365,10 @@ public class WordGrid {
         return node;
     }
 
-    //Called when the player presses enter
+    /**
+     * Called when the player presses enter
+     * Removes highlight and checks if the selected word is valid.
+     */
     public void finishWord() {
         System.out.println("Selected: " + getSelectedWord());
         resetNodeStyle(actualNodes);
@@ -389,11 +413,13 @@ public class WordGrid {
         }
     }
 
-    /*
-     * The following all deal with grid generation
-     *
+
+    /**
+     * Attempts to insert the String word into the  WordGrid
+     * @param word The word to be inserted
+     * @return  true if word was successfully inserted and false if there
+     *          was an error inserting the word into the grid.
      */
-    //Return false if it cannot insert the word
     public boolean insertWord(String word) {
         ArrayList<LetterNode> nearbyNodes;
         int start;
@@ -453,6 +479,13 @@ public class WordGrid {
     }
 
     //Returns -1 if there it cannot find an index after 10 tries;
+
+    /**
+     * Finds a random index in an ArrayList of LetterNode objects that
+     * does not contain a letter.
+     * @param list The list of LetterNode objects
+     * @return The index of the empty node
+     */
     public int randomEmptyIndex(ArrayList<LetterNode> list) {
         int numTries = 0;
         int randInt = (int) (Math.random() * (list.size()));

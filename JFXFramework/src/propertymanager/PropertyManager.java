@@ -11,7 +11,7 @@ import java.net.URL;
 import java.util.*;
 
 /**
- * @author Ritwik Banerjee
+ * @author Vincent Paladino and Ritwik Banerjee
  */
 public class PropertyManager {
 

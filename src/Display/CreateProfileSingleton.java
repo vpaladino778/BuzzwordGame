@@ -10,7 +10,7 @@ import javafx.util.Pair;
 import java.util.Optional;
 
 /**
- * Created by vpala on 11/9/2016.
+ * @author Vincent Paladino
  */
 public class CreateProfileSingleton {
     private static CreateProfileSingleton singleton = null;

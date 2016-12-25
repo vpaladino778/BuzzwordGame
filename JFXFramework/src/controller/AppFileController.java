@@ -21,7 +21,7 @@ import static settings.InitializationParameters.APP_WORKDIR_PATH;
  * This class provides the event programmed responses for the file controls
  * that are provided by this framework.
  *
- * @author Richard McKenna, Ritwik Banerjee
+ * @author Vincent Paladino, Richard McKenna, Ritwik Banerjee
  */
 public class AppFileController implements FileController {
 

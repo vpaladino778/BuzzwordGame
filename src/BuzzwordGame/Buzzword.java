@@ -10,7 +10,7 @@ import data.GameData;
 import data.GameDataFile;
 
 /**
- * Created by vpala on 11/7/2016.
+ * @author Vincent Paladino.
  */
 public class Buzzword extends AppTemplate {
 

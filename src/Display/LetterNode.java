@@ -7,7 +7,7 @@ import javafx.scene.layout.StackPane;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
- * Created by vpala on 11/11/2016.
+ * @author Vincent Paladino.
  */
 public class LetterNode {
 
@@ -18,7 +18,10 @@ public class LetterNode {
     private StackPane buttonPane;
 
 
-
+    /**
+     *
+     * @param let Letter to be put into the LetterNode
+     */
     public LetterNode(char let){
         letter = let;
         selected = false;
